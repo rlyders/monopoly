@@ -1,0 +1,366 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@                                                                             @
+@                                                                             @
+@           *****************>  MONOPOLY  <****************                   @
+@                                                                             @
+@                                                                             @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+!                                                                             !
+!                       By: Richard Jason Lyders-Gustafson                    !
+!                           * The Swedish Norske *                            !
+!                           5726 Stillbrooke Drive                            !
+!                           Houston, Texas 77096                              !
+!                           (713)-729-0135                                    !
+!-----------------------------------------------------------------------------!
+!                                                                             !
+!    This *POOR* computer expert desires funds to continue his efforts in     !
+!  the computer world. Now, obviously I can not legally except any kind of    !
+!  insentive or payment of any kind for all of my hard hours of work on       !
+!  this Monopoly game because this game is a Copyright and Trademark of       !
+!  Parker Bros. But, you users out there who use this program could feel      !
+!  sorry for me and send support to raise my impoverished standard of living. !
+!  Now, obviously if now one ends up feeling sorry for me I'll have to get    !
+!  out of the charity business and work on some more marketable programs...   !
+!  like another WORD PROCESSOR, ELECTRONIC SPREADSHEET, or if I really get    !
+!  desparate, maybe even (my morals may forbid me) another ...                !
+!  USER-FRIENDLY DO-IT-ALL software package, AHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!  !
+!     Now, that is certainly not a threat, and I don't know if I'll be able   !
+!  to look at myself in the mirror if it came down to that, but it could      !
+!  happen!                                                                    !
+!     Therefore to save me from dying poor, sick, and insane, I ask only for  !
+!  donations for my well-being. Again these are not payments of any kind for  !
+!  the game... simply heart felt kindness, shown through gifts, contributions,!
+!  and most anything else a humanitarian person would do for a POOR, SICK,    !
+!  and NEEDY soul down in the god-foresaken heat of Houston, Texas. The       !
+!  South may rise again if I don't survive this one! Take immediate action... !
+!                                                                             !
+!          *********** PLEASE SEND YOUR DONATIONS NOW ! ************          !
+!                                                                             !
+!       Anything between $5 and  $20, (please, I may start feeling as though  !
+!       I should send money to you if it is anything less), should help       !
+!       to support my basic needs for at least a little while...              !
+!                                                                             !
+!                                                                             !
+!          To: Richard Jason Lyders-Gustafson                                 !
+!              5726 Stillbrooke Drive                                         !
+!              Houston, Texas 77096                                           !
+!                                                                             !
+!    I am praying I LIVE to see these gifts of joy that you and your whole    !
+!  family are planning for me!                                                !
+!-----------------------------------------------------------------------------!
+
+FILES IN MONOPOLY.ARC:
+
+M.EXE - The executable monopoly game.
+M.DF- Contains the data for the monopoly game, such as the information on the
+      property cards, chance cards, etc.
+*.F- This extension is given to all saved game files.
+M.FF- This files contains the names of all of the saved games. All saved games
+      must be present on disk at time of call. You can switch disks in the
+      middle of a game to change the set of saved games.
+M.DOC- This file. Contains instructions, a plea or beg at beginging, and
+       information about where to call, or how to contact me in case of
+       interest at the end of the file.
+
+<<<<<********** NOTE **********>>>>>>
+This game was created in basic and compiled through use of the Quickbasic
+compiler. As a result of it's size and complexity, I was not able to
+incorporate this run-time module. It is simply used to start the program, then
+needs not be present during excecution.
+
+BRUN10.EXE- A run-time module used to startup the game. It must be present at
+            start-up.
+
+------------------------------------------------------------------------------
+
+                             --INSTRUCIONS--
+
+   This Monopoly game is run through a series of menus, all are governed by the
+same rules and operate similarily. The menu options, as they are called, may
+be chosen by use of the arrow keys, for moving the cursor, and then ENTER to
+either go to a sub-menu or excecute the command, depending on the option.
+Options may also be chosen by pressing the first letter of the option.
+Options are invalid, or unuseable if they are in gray. This means that a
+certain set of qualifications or circumstances was not met for this
+menu option to be able to be used. Most menus are in white, other menus are in
+the color of the current player in control or making the decisions. In these
+circumstances it is important to observe the color and not mess with someone
+else's player. ESC may always be use to exit a menu and return controll to
+the previous menu, except when a choice must be made, such as when you must
+choose from 10% or $200 on INCOME TAX, or when you must pay your bail after
+your third day in jail. All menus follow these rules.
+
+
+*** The PROPERTY menu:
+
+   One menu, the PROPERTY menu, a sub-menu of the DEAL menu, has a few
+more things that must be discussed. This menu is used to trade/sell property,
+buy/sell houses, and mortgage/unmortgage property. All of these options are
+run through not one cursor, but two cursors. One cursor governs which of the
+menu options you have currently chosen. The other cusor points to the property
+that you are currently working with from within your player box. The cusor
+for the options moves by using the left and right arrow keys, or the first
+letter of the option, as all menus do. The second cursor moves by use of the up
+and down arrow keys.
+       An example: You want to mortgage St. James Place.
+            First: Place the property cursor on St. James Place with the up
+                   or down arrow keys.
+           Second: Choose MORTGAGE with the left or right arrow keys and
+                   press RETURN/ENTER, or press the first letter of the option,
+                   which happens to be M.
+           RESULT: You have now mortgaged St. James Place and the income
+                   gained from doing so is displayed directly underneath your
+                   current wealth at the top of your player box.
+To do the opposite of any option, such as unmortgaging a mortgaged property,
+place the property cursor on the property to be unmortgaged and choose
+MORTGAGE.
+
+Purpose/function of the options:
+
+MORTGAGE - This option lets you mortgage or unmortgage property, depending on
+           the current prperty's state. If the property is not mortgaged, it
+           will be mortgaged, if it is mortgaged, it will be unmortgaged.
+
++@- - This option adds/subtracts houses. The plus sign (+) and the
+      minus sign (-) add and subtract houses from a property respectively.
+<Note: You must build evenly! Check any Monopoly board game rules for details.>
+
+TRADE - This option gives the property under the property cursor to the player
+        as defined by the number in parenthesis.
+             Ex: Choosing TRADE(1) when on the property cusor is on Reading R.R.
+                 causes Reading R.R. to be given to player number one, the
+                 player on the far left of the screen.
+       Choosing this option again returns the property back to it's original
+       owner.
+
+ SEE - This option lets you check the property card of the property under the
+       property cusor. This option would normally be used to check the value
+       of a property before buying houses, trading, or mortgaging that property.
+       Choosing this option again for the same property erases the card.
+
+<THE CHECK> - The check on the far right of the the menu is used to enter
+              all of the changes you have currently made to your set of
+              properties. Otherwise you may press <ESC> to exit the menu
+              without any changes.
+
+** Colors: The use of colors in this menu is important.
+        Here are descriptions:
+
+    Within the menu options:
+        Gray: This color is used to show that an option is unavailable
+              for the current property.
+               Ex: Mortage may be grayed out for a certain property if that
+                   property is already mortgaged, which means you would be
+                   unmortgaging the property, and you don't have enough to
+                   unmortgage it.
+           <Note: Unmortgaging a property includes repaying the mortgage value
+                  PLUS 10% of the mortgage value. Read any Monopoly rulebook.>
+        Other: Another color means that the option is valid for use.
+               This color depends on the current player's color. It is used
+               to show who is currently in control.
+
+    Within the player box:
+        Gray: Used to define the normal state, that is, not being mortgaged or
+              traded, of a property.
+       White: This color shows that the current property is mortgaged.
+       Other: Any other color shows that the property has been traded and the
+              color is then of the current owner.
+
+********************************************************************************
+
+********>>>>> THE ORGANIZATIN OF THE MENU SYSTEM:
+              -----------------------------------
+MAIN menu: [roll : deal : player : other]
+     Options:
+       [ROLL]=> Rolls dice for the current player and moves player piece
+       [DEAL]=> Goes to DEAL menu
+       [PLAYER]=> Changes current player so that another player may DEAL
+                  even when it's not his/her turn. You will be prompted
+                  for which player to go to.
+       [OTHER]-> Goes to OTHER menu
+     Notes:
+          - If the current player is changed to another player, and if that
+            player can't roll the dice since it isn't his/her turn, the ROLL
+            option is grayed out so as not to be used.
+          - If the current player has no money, no property, no
+            OUT OF JAIL FREE cards, and is not in jail, then the DEAL option
+            is grayed out.
+
+
+DEAL menu: [property : cards : money : reciever(#) : bail]
+     Options:
+              [PROPERY]=> Goes to the PROPERTY menu
+              [CARDS]=> Goes to CARD menu
+              [MONEY]=> Exchanges money between players.
+              [RECIEVER]=> Changes the player who is to be the reciever of
+                           all transfers of money, property, cards, etc.
+              [BIAL]=> Goes to BAIL menu
+     Notes:
+            -If a player has no property, the PROPERTY option is grayed out.
+            -If a player has no OUT OF JAIL FREE cards, CARDS is grayed out.
+            -If a player has no money cards, MONEY is grayed out.
+            -If there is only one player, RECIEVER, MONEY, and CARDS is grayed.
+            -If a pleyre is not in jail, BAIL is grayed.
+
+OTHER menu: [see : file : options : defaults]
+      Options:
+               [SEE]=> Goes to SEE menu
+               [FILE]=> Goes to FILE menu
+               [OPTIONS]=> Goes to OPTIONS menu
+               [DEFAULTS]=> Goes to DEFAULTS menu
+      Notes:
+            - All of these options are always available.
+
+SEE menu: [#?# : ? : $ : go : jail : free : go2]
+    Options:
+            [#?#]=> Goes to SEE-PROPERTY menu
+            [?]=> Goes to SEE-CHANC menu
+            [$]=> Goes to SEE-COMMUNIT CHEST menu
+            [GO]=> Displays side of Monpoly board that has GO on the right side
+            [JAIL]=> Displays side of Monopoly board that has JAIL on
+                     the right side
+            [FREE]=> Displays side of Monopoly board that has FREE on
+                     the right side
+            [GO2]=> Displays side of Monopoly board that has GO TO JAIL on
+                    the right side
+    Note: All of these options are always available.
+
+FILE menu: [save : end : new : load]
+     Options:
+             [SAVE]=> Goes to SAVE menu
+             [END]=> Ends Monopoly and  returns control over to DOS.
+             [NEW]=> Restarts Monopoly, resets defaults, such as player color
+                     player piece, sound on/of, number of players, etc.
+             [LOAD]=> Goes to LOAD menu
+     Note: If there are no saved games according to the file- M.FF,
+           LOAD is grayed out, otherwise all of these options are always
+           available.
+
+OPTIONS menu: [players : delete : token : name]
+        Options:
+                [PLAYERS]=> Allows you to change the number of players
+                [DELETE]=> Allows you to delete a player from play
+                [TOKEN]=> Goes to TOKEN menu
+                [NAME]=> Allows you to change/add a name of a player
+         Notes:
+              -if there is only one player left, DELETE is grayed out. Use
+               END under the FILE menu to end game.
+              -All other options are always available
+
+DEFAULTS menu: [pause(#) : auto : sound(on/off) : monitor(color/monochrome)]
+         Options:
+                 [PAUSE(#)]=> This option lets you control the length of
+                              time the computer waits for you to read,
+                              notice, or see something. The number represents
+                              the pause in seconds. The current setting is
+                              shown in the parenthesis.
+                 [AUTO]=> Turns the automatic mode on. To turn automatic mode
+                          off, press any key during it's running and control
+                          will return to you at the next menu.
+                 [SOUND()]=> Shows current sound setting and, when chosen,
+                             switches the setting between ON and OFF.
+                 [MONITOR()]=> Shows current monitor setting and when chosen
+                               switches the monitor setting between color
+                               and monichrome. Black is same as MONOCHROME.
+         Notes:
+               -If the game is currently in the DUE mode (this is automatically
+                set when a player owes more money than he/she current has),
+                AUTO is grayed out.
+               -AUTO automatically ends when DUE mode is activated.
+
+PROPERTY menu: [mortgage : +^- : trade(#) : see : <check>]
+         Options:
+                 [MORTGAGE]=> Mortgages/Unmortgages property
+                 [+^-]=> Buys/sells houses
+                 [trade(#)]=> Trades property
+                 [SEE]=> Displays property card
+                 [<check>]=> Accepts changes and returns to previous menu
+         Notes:
+               -UnMortgaging includes paying 10% of mortgage price
+               -Subtracting houses gives you of the cost of purchasing
+                houses.<Read Monopoly rules for more>
+               -All options effect only property under the property cursor
+                 <See near begining of document for specifics on DEAL menu>
+               -To change the receiver of any trading, use TAB to increase
+                the number and SHIFT/TAB to decrease the number representing
+                the receiving player shown in parenthesis.
+               -To charge the receiving player for the property he is recieving
+                enter the value desired for the property. You can do this
+                after you trade the property or before. If a value is added
+                before a prperty if traded, the prperty is automatically traded
+                 <Try it, you'll understand once you do it>
+               -You can't trade any property that has houses, or if any
+                property in a group has houses, none of the properties in that
+                group may be traded. <Check the Monopoly rules. It's true>
+                In this case TRADE is grayed out.
+               -You can't mortgage any property that has houses, or if any
+                property in a group has houses, none of the properties in that
+                group may be mortgaged. <Check the Monopoly rules. It's true>
+                In this case MORTGAGE is grayed out.
+               -You can't add houses to any property that has houses, or if any
+                property in a group is mortgaged,none of the properties in that
+                group may gain houses. <Check the Monopoly rules. It's true>
+                In this case +^- is grayed out.
+               -The computer checks EVERYTHING to make sure that each option
+                is either on or off according to the settings of the property
+                under the property cursor. If there is a time when you can't
+                choose an option, there is always a good reason. Be patient,
+                first thing is to check is whether you have enough money to
+                do whatever it is you wish to do, then check the settings of
+                the current property, is the property mortgaged, is it already
+                traded, does it have houses on it, and if you own all of a
+                group, do any of the other properties have houses on them, or
+                are any of them mortgaged or traded? <Check the rules of a
+                Monopoly boardgame if at any time there's an option that is
+                grayed out that you think shouldn't be.>
+               -ESC can be used to return to previous menu without accepting
+                changes.
+               -MORTGAGE,TRADE,SEE are all switches. That is, to unmortgage
+                a property, choose MORTGAGE again; to erase a property card
+                that was shown choose SEE again; to return a property to it's
+                previous owner choose TRADE again.
+               -When undoing something that was done during the current session
+                of the PROPERTY menu, no penalties are paid.
+                       ie.:-Unmortgaging a mortgaged property before you choose
+                            the check results in no 10% charge.
+                           -Selling houses to bank, before pressing check to
+                            accept the houses that you just bought, results in
+                            a full refund for the cost of the houses.
+               -The values shown to the right of propertes are the gains/losses
+                according to the total money spent on or recieved from that
+                property.
+
+CARDS menu:[chance : community chest : reciever(#)]
+      Options:
+              [CHANCE]=> Trades/sells your GET OUT OF JAIL FREE Chance card
+              [COMMUNITY CHEST]=> Trades/sells your GET OUT OF JAIL FREE
+                                  Community Chest card
+              [RECEIVER(#)]=> Displays current receiver and, when chosen,
+                              lets you chnge the reciver to a specified player.
+SEE-PROPERTY menu: ######## <PROPERTY NAME> ###########
+             Options: <NONE>
+             Notes:-Use the UP,DOWN,LEFT,RIGHT arrow keys to change the current
+                    property. The keys move change the name as though you were
+                    moving around the board. RIGHT moves you one property to
+                    your right. LEFT moves you one property to your left. UP
+                    moves you one BOARD to your right, and DOWN moves you one
+                    BOARD to your left.
+                   -When ENTER/RETURN is pressed the current property's
+                    property card will be shown/erased, depending on wether it
+                    is currently being shown.
+                   -ESC exits this menu.
+
+*******************************************************************************
+ For comments, more information, clearer instructions, the source code, the
+ latest version of the game, chit-chat, etc...
+ Call me at (713)-729-0135. Or write to me at:
+
+                            Richard Jason Lyders-Gustafson
+                            5726 Stillbrooke Drive
+                            Houston, Texas 77096
+
+
+ You may also be able to get a hold of me through the YELLOW ROSE BBS Bulletin
+ Board in Houston, Texas at (713) 326-2999. Leave a message for me and I'll try
+ to get back to you as soon as possible.
+*******************************************************************************
