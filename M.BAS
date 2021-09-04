@@ -42,12 +42,48 @@ Rem Load 2 card types (chance and community chest) x 16 cards x # of text lines
 Next C, B, A
 Close #1
 
-120 PLAYY = 0: SOUNDS = 1: AUTOKYBD = 0: CP = 0: CL = 1: PL = 1: E = 0: T = 0: FM = 1: NUM_OF_PLAYERS = 4: GoSub 8570
-130 LB = 0: C# = 0: For C3 = 2 To 15: If C3 = 3 Or C3 = 6 Or C3 = 7 Or C3 = 8 Or C3 = 14 Or C3 = 15 Then 140 Else C# = C# + 1: C3(C#) = C3
-140 Next C3: For L = 1 To 4: N(L) = L: UN(L) = L: Next L
-150 KK = 8: For L = 1 To 4: CCR(N(L)) = N(L): OCCR(N(L)) = N(L): L(N(L)) = KR(N(L)): CC3(N(L)) = N(L): OCC3(N(L)) = N(L): PC(N(L)) = C3(N(L)): BV(N(L)) = 11: TP(N(L)) = 0: RTP(N(L)) = 0: CP(N(L)) = 0: X(1, N(L)) = R1 - KK + N(L): X(2, N(L)) = L1 + KK - N(L): Y(N(L)) = T1 + 4: W(N(L)) = 1500
-151 J$(L) = "Player" + Right$(Str$(L), 1): Next L: WW = 3: WH = 9
-160 CGN$ = "": L = 1: B = 0
+120 PLAYY = 0: SOUNDS = 1: AUTOKYBD = 0: CP = 0: CL = 1: PL = 1: E = 0: T = 0: FM = 1
+MAX_PLAYERS = 4
+NUM_OF_PLAYERS = MAX_PLAYERS
+GoSub 8570
+130 LB = 0: C# = 0
+For C3 = 2 To 15
+    If C3 = 3 Or C3 = 6 Or C3 = 7 Or C3 = 8 Or C3 = 14 Or C3 = 15 Then 
+        goto 140 
+    Else 
+        C# = C# + 1
+        C3(C#) = C3
+140 Next C3
+
+For L = 1 To MAX_PLAYERS
+    N(L) = L
+    UN(L) = L
+Next L
+150 KK = 8
+
+For L = 1 To MAX_PLAYERS
+    CCR(N(L)) = N(L)
+    OCCR(N(L)) = N(L)
+    L(N(L)) = KR(N(L))
+    CC3(N(L)) = N(L)
+    OCC3(N(L)) = N(L)
+    PC(N(L)) = C3(N(L))
+    BV(N(L)) = 11
+    TP(N(L)) = 0
+    RTP(N(L)) = 0
+    CP(N(L)) = 0
+    X(1, N(L)) = R1 - KK + N(L)
+    X(2, N(L)) = L1 + KK - N(L)
+    Y(N(L)) = T1 + 4
+    W(N(L)) = 1500
+151 J$(L) = "Player" + Right$(Str$(L), 1)
+Next L
+
+WW = 3
+WH = 9
+160 CGN$ = ""
+L = 1
+B = 0
 Randomize Timer
 For A = 1 To CARDS_PER_TYPE
     C1(A) = A
@@ -96,12 +132,12 @@ Next CR
 300 Locate BV + 10, BH: Print "Õ Ö × Ø Ù Ú Û Ü Ý à á â ã ä å æ ç è é ê ë ì í î ï ð ñ ò ó ô õ ö ÷ ø ù ú û ü ý þ";
 310 H = 2: BH = H: EH = BH + 78: V = 13: BV = V: EV = V + 10
 
-320 For L = 1 To 4
+320 For L = 1 To MAX_PLAYERS
     CC3(N(L)) = OCC3(N(L))
     CCR(N(L)) = OCCR(N(L))
 Next L
 
-330 For L = 1 To 4
+330 For L = 1 To MAX_PLAYERS
     H(N(L)) = BH + (CCR(N(L)) - (Int(CCR(N(L)) / 40) * 40) - 1) * 2
     V(N(L)) = BV + Int(CCR(N(L)) / 40) * 2
 Next L
@@ -114,10 +150,10 @@ Next L
 350 Poke 1050, Peek(1052): L = 1: Y1 = 7: X1 = 40: CC = ZZ: X1 = 28
 360 Rem
 370 Rem *** menu ***
-380 X1 = (80 - 4 * NUM_OF_PLAYERS) / 2
+380 X1 = (80 - MAX_PLAYERS * NUM_OF_PLAYERS) / 2
 390 Locate Y1, 1: Color ZZ, 0: Print Space$(X1) + " [ ";
 400 For A = 1 To NUM_OF_PLAYERS - 1: Color C3(CC3(N(A))), 0: Print Chr$(KR(CCR(N(A))));: Color ZZ, 0: Print " | ";: Next A
-410 Color C3(CC3(N(NUM_OF_PLAYERS))), 0: Print Chr$(KR(CCR(N(NUM_OF_PLAYERS))));: Color ZZ, 0: Print " ]" + Space$((80 - 4 * NUM_OF_PLAYERS - X1) / 2)
+410 Color C3(CC3(N(NUM_OF_PLAYERS))), 0: Print Chr$(KR(CCR(N(NUM_OF_PLAYERS))));: Color ZZ, 0: Print " ]" + Space$((80 - MAX_PLAYERS * NUM_OF_PLAYERS - X1) / 2)
 420 GoTo 480
 430 Locate Y1 - 1, X1 + 4 * LCL - 1: Print Chr$(218); Chr$(196); Chr$(191);
 440 Locate Y1, X1 + 4 * LCL + 1: Print Chr$(179);
@@ -127,8 +163,8 @@ Next L
 480 Color 0, 0: GoSub 430: Color 14, 0: LCL = L: GoSub 430
 490 Color C3(CC3(N(L))), 0: Locate V(N(L)), H(N(L)): Print Chr$(KR(CCR(N(L))));: Locate Y1, X1 + 4 * L: Print Chr$(KR(CCR(N(L))));
 500 A$ = InKey$: On Len(A$) + 1 GOTO 500, 510, 570
-510 If A$ = Chr$(13) Then For F = 1 To 4: OCC3(N(F)) = CC3(N(F)): OCCR(N(F)) = CCR(N(F)): Next F: AA = 1: GoTo 720
-520 If A$ = Chr$(27) Then For F = 1 To 4: CC3(N(F)) = OCC3(N(F)): CCR(N(F)) = OCCR(N(F)): Next F: AA = 0: GoTo 730
+510 If A$ = Chr$(13) Then For F = 1 To MAX_PLAYERS: OCC3(N(F)) = CC3(N(F)): OCCR(N(F)) = CCR(N(F)): Next F: AA = 1: GoTo 720
+520 If A$ = Chr$(27) Then For F = 1 To MAX_PLAYERS: CC3(N(F)) = OCC3(N(F)): CCR(N(F)) = OCCR(N(F)): Next F: AA = 0: GoTo 730
 530 GoTo 540
 540 IF VAL(A$)>C# OR VAL(A$)=0 THEN 560 ELSE FOR A=1 TO NUM_OF_PLAYERS:IF VAL(A$)=CC3(N(A)) THEN CHCK=1
 550 NEXT A:IF CHCK THEN CHCK=0:GOTO 490 ELSE CC3(N(L))=VAL(A$):GOTO 490
@@ -719,8 +755,11 @@ Next L
 6380  REM 
 6390  REM @@@@ PLAYER PAYS RENT TO OWNER @@@@
 6400  REM 
-6410 RR=1:FOR P=1 TO 4:IF G(PROPERTY_GROUP_NUM(CP),P)<>CP AND O(G(PROPERTY_GROUP_NUM(CP),P))=O(CP) THEN RR=RR+1
-6420 NEXT P:ON PROPERTY_TYPE(CP)-1 GOTO 6430,6530
+6410 RR=1
+FOR P=1 TO 4
+    IF G(PROPERTY_GROUP_NUM(CP),P)<>CP AND O(G(PROPERTY_GROUP_NUM(CP),P))=O(CP) THEN RR=RR+1
+6420 NEXT P
+ON PROPERTY_TYPE(CP)-1 GOTO 6430,6530
 6430 ON PROPERTY_GROUP_NUM(CP)-8 GOTO 6450,6470
 6440 REM @@@@ RENT ON R/R @@@@
 6450 RL=RR+1:P1=CP:GOSUB 5020:R=25*2^(RR-1):GOTO 6570
@@ -903,7 +942,9 @@ Next L
 8220 FJ(N(PL))=0:IF J1=N(L) THEN J1=0
 8230 IF J2=N(L) THEN J2=0
 8240 LL2=N(L):FOR LL1=L TO NUM_OF_PLAYERS-1:N(LL1)=N(LL1+1):NEXT LL1:N(NUM_OF_PLAYERS)=LL2
-8250 FOR LL1=1 TO 4:UN(N(LL1))=LL1:NEXT LL1
+8250 FOR LL1=1 TO 4
+    UN(N(LL1))=LL1
+NEXT LL1
 8260 NUM_OF_PLAYERS=NUM_OF_PLAYERS-1
 8270 IF L<CL THEN CL=CL-1 ELSE IF CL>NUM_OF_PLAYERS THEN CL=1
 8280 IF L=CL THEN DB=0:PT=0
@@ -917,14 +958,14 @@ Next L
 8360 REM **** SAVE GAME IN GN$ ****
 8370 LOCATE B1+1,L2+7:COLOR 7,0:PRINT USING"Saving:`&'";GN$
 8380 OPEN "O",#1,GN$+".MF":WRITE #1,CL,CP,NX,Y,DB,NUM_OF_PLAYERS,J1,J2,T,E,C1,C2,WW,SOUNDS,NM,PA,PB,PL,PL1,PL2,AC1,AC2,PLA,PLB,ALL,NOROLL,D1,D2,PT,PLAYY
-8390 FOR J=1 TO 4:WRITE #1,J$(J),J(J),L(J),CP(J),X(1,J),Y(J),W(J),PC(J),FJ(J),RTP(J),TP(J),N(J),UN(J),OCC3(J),OCCR(J):NEXT J
+8390 FOR J=1 TO MAX_PLAYERS:WRITE #1,J$(J),J(J),L(J),CP(J),X(1,J),Y(J),W(J),PC(J),FJ(J),RTP(J),TP(J),N(J),UN(J),OCC3(J),OCCR(J):NEXT J
 8400 FOR P=1 TO CARDS_PER_TYPE:WRITE #1,C1(P),C2(P):NEXT P
 8410 FOR P=1 TO 40:WRITE #1,O(P),U(P),M(P):NEXT P:CLOSE #1:GOSUB 7330:RETURN
 8420 REM
 8430 REM **** LOAD GAME FROM GN$ ****
 8440 LOCATE B1+1,L2+7:COLOR 7,0:PRINT USING"Loading:`&'";GN$
 8450 OPEN "I",#1,GN$+".MF":INPUT #1,CL,CP,NX,Y,DB,NUM_OF_PLAYERS,J1,J2,T,E,C1,C2,WW,SOUNDS,NM,PA,PB,PL,PL1,PL2,AC1,AC2,PLA,PLB,ALL,NOROLL,D1,D2,PT,PLAYY
-8460 FOR J=1 TO 4:INPUT #1,J$(J),J(J),L(J),CP(J),X(1,J),Y(J),W(J),PC(J),FJ(J),RTP(J),TP(J),N(J),UN(J),OCC3(J),OCCR(J):NEXT J
+8460 FOR J=1 TO MAX_PLAYERS:INPUT #1,J$(J),J(J),L(J),CP(J),X(1,J),Y(J),W(J),PC(J),FJ(J),RTP(J),TP(J),N(J),UN(J),OCC3(J),OCCR(J):NEXT J
 8470 FOR P=1 TO CARDS_PER_TYPE:INPUT #1,C1(P),C2(P):NEXT P
 8480 FOR P=1 TO 40:INPUT #1,O(P),U(P),M(P):NEXT P:CLOSE #1:GOSUB 7330:RETURN
 8490 REM
@@ -944,7 +985,9 @@ Next L
 8630 T2=B1+2:B2=T2+16:R2=L2+33
 8640 T3=T2+4:B3=T3+6:L3=L2+1:R3=R2-1
 8650 T4=B1+1:T5=B1+2:W6=9:H6=14:W#=14:T6=B1+2:B6=T6+H6-1
-8660 FOR L=1 TO 4:BV(L)=T6+3:NEXT L
+8660 FOR L=1 TO 4
+    BV(L)=T6+3
+NEXT L
 8670 RETURN
 8680 REM
 8690 REM save file names
@@ -1126,9 +1169,9 @@ Next L
 10450 GOSUB 10380:GOTO 1940
 10460 REM
 10470 REM SET NUMBER OF PLAYERS
-10480 COLOR 7,0:LOCATE B1+1,L2+2:PRINT "Enter number of players [1-4]";
+10480 COLOR 7,0:LOCATE B1+1,L2+2:PRINT USING "Enter number of players [1-#]";MAX_PLAYERS
 10490 GOSUB 11350:IF INK$=CHR$(27) THEN GOSUB 7330:GOTO 10830
-10500 IF INK>4 OR INK<1 THEN GOSUB 11280:GOTO 10490
+10500 IF INK>MAX_PLAYERS OR INK<1 THEN GOSUB 11280:GOTO 10490
 10510 GOSUB 7330:COLOR 7,0:LOCATE B1+1,L2+12:PRINT USING "# Players";INK
 10520 GOSUB 10310:GOSUB 7330
 10530 IF NUM_OF_PLAYERS=INK GOTO 10410 ELSE IF INK>NUM_OF_PLAYERS THEN 10550
