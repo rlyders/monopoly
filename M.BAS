@@ -3,17 +3,18 @@
 30 Rem ON A GOTO 1740,2380,3050,3150 'HAVE ERASE/REDIM/DIM STATEMENTS
 40 Clear: Screen 0, , 0, 0: Color , 0: Cls: Width 80: Randomize Timer: Locate , , 0: KEY Off: Def Seg = 64: If (Peek(16) And &H30) = &H30 Then ZZ = 7 Else ZZ = 8
 50 Def Seg = 0
-60 Dim J(4), PROPERTY_SHORT_NAMES$(40), PROPERTY_COST(40), PROPERTY_FOREGROUND_COLOR(40), PROPERTY_BACKGROUND_COLOR(40), O(40), PROPERTY_TYPE(40), G(10, 4), PROPERTY_GROUP_NUM(40), RENT_RATES(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(16), C2(16), PROPERTY_BOARD_NUM(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), PROPERTY_NAMES$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
-70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), BV(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, 16, 7), N(4), UN(4), XN(4), J$(4)
+CARDS_PER_TYPE = 16
+60 Dim J(4), PROPERTY_SHORT_NAMES$(40), PROPERTY_COST(40), PROPERTY_FOREGROUND_COLOR(40), PROPERTY_BACKGROUND_COLOR(40), O(40), PROPERTY_TYPE(40), G(10, 4), PROPERTY_GROUP_NUM(40), RENT_RATES(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(CARDS_PER_TYPE), C2(CARDS_PER_TYPE), PROPERTY_BOARD_NUM(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), PROPERTY_NAMES$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
+70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), BV(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, CARDS_PER_TYPE, 7), N(4), UN(4), XN(4), J$(4)
 
 Rem Load data file: property, cards, etc
 80 Open "I", #1, "M.DF"
 
 Rem Load 41 properties (Go is loaded twice (first and last) for some reason)
 For P = 0 To 40
-
-Rem Load property name, abbreviation, foreground color, background color, group num (property group#), kind (board space type), board num (side# of board) (1-4 or 0 - why 0?), cost
-Input #1, PROPERTY_NAMES$(P), PROPERTY_SHORT_NAMES$(P), PROPERTY_FOREGROUND_COLOR(P), PROPERTY_BACKGROUND_COLOR(P), PROPERTY_GROUP_NUM(P), PROPERTY_TYPE(P), PROPERTY_BOARD_NUM(P), PROPERTY_COST(P): Next
+    Rem Load property name, abbreviation, foreground color, background color, group num (property group#), kind (board space type), board num (side# of board) (1-4 or 0 - why 0?), cost
+    Input #1, PROPERTY_NAMES$(P), PROPERTY_SHORT_NAMES$(P), PROPERTY_FOREGROUND_COLOR(P), PROPERTY_BACKGROUND_COLOR(P), PROPERTY_GROUP_NUM(P), PROPERTY_TYPE(P), PROPERTY_BOARD_NUM(P), PROPERTY_COST(P)
+Next
 
 Rem Load 6 rent rates x 41 properties
 90 For A = O To 5
@@ -34,7 +35,7 @@ Next A
 
 Rem Load 2 card types (chance and community chest) x 16 cards x # of text lines
 100 For A = 1 To 2
-    For B = 1 To 16
+    For B = 1 To CARDS_PER_TYPE
         Input #1, CARD$(A, B, 0)
         110 For C = 1 To Val(CARD$(A, B, 0))
             Input #1, CARD$(A, B, C)
@@ -46,15 +47,47 @@ Close #1
 140 Next C3: For L = 1 To 4: N(L) = L: UN(L) = L: Next L
 150 KK = 8: For L = 1 To 4: CCR(N(L)) = N(L): OCCR(N(L)) = N(L): L(N(L)) = KR(N(L)): CC3(N(L)) = N(L): OCC3(N(L)) = N(L): PC(N(L)) = C3(N(L)): BV(N(L)) = 11: TP(N(L)) = 0: RTP(N(L)) = 0: CP(N(L)) = 0: X(1, N(L)) = R1 - KK + N(L): X(2, N(L)) = L1 + KK - N(L): Y(N(L)) = T1 + 4: W(N(L)) = 1500
 151 J$(L) = "Player" + Right$(Str$(L), 1): Next L: WW = 3: WH = 9
-160 CGN$ = "": L = 1: B = 0: Randomize Timer: For A = 1 To 16: C1(A) = A: C2(A) = A: Next A: For A = 1 To 16: Swap C1(A), C1(Int(Rnd * 16 + 1)): Swap C2(A), C2(Int(Rnd * 16 + 1)): Next A: GoSub 750: GoTo 900
+160 CGN$ = "": L = 1: B = 0
+Randomize Timer
+For A = 1 To CARDS_PER_TYPE
+    C1(A) = A
+    C2(A) = A
+Next A
+For A = 1 To CARDS_PER_TYPE
+    Swap C1(A), C1(Int(Rnd * CARDS_PER_TYPE + 1))
+    Swap C2(A), C2(Int(Rnd * CARDS_PER_TYPE + 1))
+Next A
+GoSub 750
+GoTo 900
+
 170 Rem
 180 Rem chrs/colors
 190 Rem
 200 Screen 0, , 1, 0: Color 0, 0: Cls: Screen 0, , 1, 1
 210 WDTH = 80 / C#: V = 11: H = 2: EH = H + C# * WDTH: BH = H
-220 H = 1: For C3 = 1 To C#: Locate V - 1, H + 4: Color ZZ, 0: Print C3: Locate V, H: Color C3(C3), 0: Print String$(WDTH, Chr$(219));: H = H + WDTH: Next C3: Color ZZ, 0: H = 2: BH = H: EH = 79: V = 13: BV = V: EV = V + 10
-230 Locate BV, BH: For CR = 1 To 6: Print Chr$(CR); " ";: Next CR: Print Chr$(8): H = 16
-240 For CR = 14 To 27: Locate V, H: Print Chr$(CR);: H = H + 2: Next CR
+220 H = 1
+For C3 = 1 To C#
+    Locate V - 1, H + 4
+    Color ZZ, 0
+    Print C3
+    Locate V, H
+    Color C3(C3), 0
+    Print String$(WDTH, Chr$(219));
+    H = H + WDTH
+Next C3
+Color ZZ, 0: H = 2: BH = H: EH = 79: V = 13: BV = V: EV = V + 10
+230 Locate BV, BH
+For CR = 1 To 6
+    Print Chr$(CR); " ";
+Next CR
+Print Chr$(8)
+H = 16
+240 For CR = 14 To 27
+    Locate V, H
+    Print Chr$(CR);
+    H = H + 2
+Next CR
+
 250 Locate BV, BH + 42: Print "! "; Chr$(34); " # $ % & ' ( ) * + , - . / 0 1 2 3"
 260 Locate BV + 2, BH: Print "4 5 6 7 8 9 : ; < = > ? @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ["
 270 Locate BV + 4, BH: Print "\ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~  Ä Å Ç É"
@@ -62,9 +95,22 @@ Close #1
 290 Locate BV + 8, BH: Print "¨ ≠ Æ Ø ∞ ± ≤ ¥ µ ∂ ∑ ∏ π ∫ ª º Ω æ ø ¿ ¡ ¬ √ ƒ ≈ ∆ « » …   À Ã Õ Œ œ – — “ ” ‘"
 300 Locate BV + 10, BH: Print "’ ÷ ◊ ÿ Ÿ ⁄ € ‹ › ‡ · ‚ „ ‰ Â Ê Á Ë È Í Î Ï Ì Ó Ô  Ò Ú Û Ù ı ˆ ˜ ¯ ˘ ˙ ˚ ¸ ˝ ˛";
 310 H = 2: BH = H: EH = BH + 78: V = 13: BV = V: EV = V + 10
-320 For L = 1 To 4: CC3(N(L)) = OCC3(N(L)): CCR(N(L)) = OCCR(N(L)): Next L
-330 For L = 1 To 4: H(N(L)) = BH + (CCR(N(L)) - (Int(CCR(N(L)) / 40) * 40) - 1) * 2: V(N(L)) = BV + Int(CCR(N(L)) / 40) * 2: Next L
-340 For L = 1 To NUM_OF_PLAYERS: Locate V(N(L)), H(N(L)): Color C3(CC3(N(L))), 0: Print Chr$(KR(CCR(N(L)))): Next L
+
+320 For L = 1 To 4
+    CC3(N(L)) = OCC3(N(L))
+    CCR(N(L)) = OCCR(N(L))
+Next L
+
+330 For L = 1 To 4
+    H(N(L)) = BH + (CCR(N(L)) - (Int(CCR(N(L)) / 40) * 40) - 1) * 2
+    V(N(L)) = BV + Int(CCR(N(L)) / 40) * 2
+Next L
+
+340 For L = 1 To NUM_OF_PLAYERS:
+    Locate V(N(L)), H(N(L))
+    Color C3(CC3(N(L))), 0
+    Print Chr$(KR(CCR(N(L))))
+Next L
 350 Poke 1050, Peek(1052): L = 1: Y1 = 7: X1 = 40: CC = ZZ: X1 = 28
 360 Rem
 370 Rem *** menu ***
@@ -771,11 +817,11 @@ Close #1
 7360  REM SEECARD
 7370  REM 
 7380 LASTCARD=0:IF SC=1 THEN COLOR 6,0:LOCATE T2,L2+14:PRINT "Chance" ELSE COLOR 3,0:LOCATE T2,L2+9:PRINT "Community Chest"
-7390 COLOR 7,0:LOCATE B1+1,L2+3:PRINT "ENTER 2-DIGIT CARD # [01-16]";:INK$=""
+7390 COLOR 7,0:LOCATE B1+1,L2+3:PRINT USING "ENTER 2-DIGIT CARD NUM [01-##]";CARDS_PER_TYPE:INK$=""
 7400 A$=INKEY$:IF LEN(A$)=0 THEN 7400
 7410 IF VAL(A$) OR A$="0" THEN INK$=INK$+A$ ELSE IF A$=CHR$(27) THEN SEE=0:GOSUB 7330:GOSUB 7060:GOTO 3950 ELSE GOSUB 11280:GOTO 7400
 7420 IF LEN(INK$)<2 THEN 7400 ELSE AA=VAL(INK$)
-7430 IF AA>16 OR AA<1 THEN GOSUB 11280:INK$="":GOTO 7400
+7430 IF AA>CARDS_PER_TYPE OR AA<1 THEN GOSUB 11280:INK$="":GOTO 7400
 7440 CARD=AA:IF CARD=LASTCARD THEN LASTCARD=0:COLOR 0,0:GOSUB 11150:GOTO 7390 ELSE COLOR 0,9-3*SC:GOSUB 11150
 7450 LASTCARD=CARD:GOSUB 7580:GOTO 7390
 7460  REM 
@@ -783,11 +829,11 @@ Close #1
 7480  REM 
 7490 CD=1:PM=0:IF SC=2 THEN 7540
 7500 COLOR 6,0:LOCATE T2,L2+15:PRINT"Chance":COLOR 0,6:GOSUB 11150
-7510 IF NM=0 THEN C1=C1+1:IF C1>16 THEN C1=1
+7510 IF NM=0 THEN C1=C1+1:IF C1>CARDS_PER_TYPE THEN C1=1
 7520 IP=2:GOSUB 11180:IF IP=2 THEN C1(C1)=INK
 7530 CARD=C1(C1):IF J1 AND CARD=5 THEN 7510 ELSE 7580
 7540 COLOR 3,0:LOCATE T2,L2+10:PRINT "Community Chest":COLOR 0,3:GOSUB 11150
-7550 IF NM=0 THEN C2=C2+1:IF C2>16 THEN C2=1
+7550 IF NM=0 THEN C2=C2+1:IF C2>CARDS_PER_TYPE THEN C2=1
 7560 IP=2:GOSUB 11180:IF IP=2 THEN C2(C2)=INK
 7570 CARD=C2(C2):IF J2 AND CARD=14 THEN 7550
 7580 COLOR 0,9-SC*3:FOR A=1 TO VAL(CARD$(SC,CARD,0))
@@ -872,14 +918,14 @@ Close #1
 8370 LOCATE B1+1,L2+7:COLOR 7,0:PRINT USING"Saving:`&'";GN$
 8380 OPEN "O",#1,GN$+".MF":WRITE #1,CL,CP,NX,Y,DB,NUM_OF_PLAYERS,J1,J2,T,E,C1,C2,WW,SOUNDS,NM,PA,PB,PL,PL1,PL2,AC1,AC2,PLA,PLB,ALL,NOROLL,D1,D2,PT,PLAYY
 8390 FOR J=1 TO 4:WRITE #1,J$(J),J(J),L(J),CP(J),X(1,J),Y(J),W(J),PC(J),FJ(J),RTP(J),TP(J),N(J),UN(J),OCC3(J),OCCR(J):NEXT J
-8400 FOR P=1 TO 16:WRITE #1,C1(P),C2(P):NEXT P
+8400 FOR P=1 TO CARDS_PER_TYPE:WRITE #1,C1(P),C2(P):NEXT P
 8410 FOR P=1 TO 40:WRITE #1,O(P),U(P),M(P):NEXT P:CLOSE #1:GOSUB 7330:RETURN
 8420 REM
 8430 REM **** LOAD GAME FROM GN$ ****
 8440 LOCATE B1+1,L2+7:COLOR 7,0:PRINT USING"Loading:`&'";GN$
 8450 OPEN "I",#1,GN$+".MF":INPUT #1,CL,CP,NX,Y,DB,NUM_OF_PLAYERS,J1,J2,T,E,C1,C2,WW,SOUNDS,NM,PA,PB,PL,PL1,PL2,AC1,AC2,PLA,PLB,ALL,NOROLL,D1,D2,PT,PLAYY
 8460 FOR J=1 TO 4:INPUT #1,J$(J),J(J),L(J),CP(J),X(1,J),Y(J),W(J),PC(J),FJ(J),RTP(J),TP(J),N(J),UN(J),OCC3(J),OCCR(J):NEXT J
-8470 FOR P=1 TO 16:INPUT #1,C1(P),C2(P):NEXT P
+8470 FOR P=1 TO CARDS_PER_TYPE:INPUT #1,C1(P),C2(P):NEXT P
 8480 FOR P=1 TO 40:INPUT #1,O(P),U(P),M(P):NEXT P:CLOSE #1:GOSUB 7330:RETURN
 8490 REM
 8500 REM DISPLAY PLAYER'S CHARACTER
