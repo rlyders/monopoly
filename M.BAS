@@ -1,57 +1,57 @@
-10 REM @@@@@@@@@@ (N=N+1)====[N=N MOD RANGE+1]
-20 REM $STATIC
-30 REM ON A GOTO 1740,2380,3050,3150 'HAVE ERASE/REDIM/DIM STATEMENTS
-40 CLEAR:SCREEN 0,,0,0:COLOR ,0:CLS:WIDTH 80:RANDOMIZE TIMER:LOCATE ,,0:KEY OFF:DEF SEG=64:IF (PEEK(16) AND &H30)=&H30 THEN ZZ=7 ELSE ZZ=8
-50 DEF SEG=0
-60 DIM J(4),AB$(40),C(40),FC(40),BC(40),O(40),K(40),G(10,4),GN(40),R(6,40),L$(4),L(4),CP(4),X(2,4),Y(4),B(4,11),U(40),PP(4,28),P(4),M(40),C1(16),C2(16),BN(40),PM(40),W(4),BH(4),V(4),H(4),PC(4),N$(40),FJ(4),I(4),CH$(32),RTP(4),PD(40)
-70 DIM CM(40),CU(40),CI(40),CW(40),CO(40),KR(240),C3(11),TP(4),BV(4),PPN(40),CC3(4),CCR(4),GN$(60),KY$(11),HB(10),O$(8),OO$(8),OO(8),OCCR(4),OCC3(4),CARD$(2,16,7),N(4),UN(4),XN(4),J$(4)
-80 OPEN "I",#1,"M.DF":FOR P=0 TO 40:INPUT #1,N$(P),AB$(P),FC(P),BC(P),GN(P),K(P),BN(P),C(P):NEXT
-90 FOR A=O TO 5:FOR P=0 TO 40:INPUT #1,R(A,P):NEXT P,A:FOR G=0 TO 10:FOR P=1 TO 4:INPUT #1,G(G,P),B(P,G):NEXT P,G:FOR A=1 TO 240:INPUT #1,KR(A):NEXT A
-100 FOR A=1 TO 2:FOR B=1 TO 16:INPUT #1,CARD$(A,B,0)
-110 FOR C=1 TO VAL(CARD$(A,B,0)):INPUT #1,CARD$(A,B,C):NEXT C,B,A:CLOSE #1
-120 PLAYY=0:SOUNDS=1:AUTOKYBD=0:CP=0:CL=1:PL=1:E=0:T=0:FM=1:PS=4:GOSUB 8570
-130 LB=0:C#=0:FOR C3=2 TO 15:IF C3=3 OR C3=6 OR C3=7 OR C3=8 OR C3=14 OR C3=15 THEN 140 ELSE C#=C#+1:C3(C#)=C3
-140 NEXT C3:FOR L=1 TO 4:N(L)=L:UN(L)=L:NEXT L
-150 KK=8:FOR L=1 TO 4:CCR(N(L))=N(L):OCCR(N(L))=N(L):L(N(L))=KR(N(L)):CC3(N(L))=N(L):OCC3(N(L))=N(L):PC(N(L))=C3(N(L)):BV(N(L))=11:TP(N(L))=0:RTP(N(L))=0:CP(N(L))=0:X(1,N(L))=R1-KK+N(L):X(2,N(L))=L1+KK-N(L):Y(N(L))=T1+4:W(N(L))=1500
-151 J$(L)="Player"+RIGHT$(STR$(L),1):NEXT L:WW=3:WH=9
-160 CGN$="":L=1:B=0:RANDOMIZE TIMER:FOR A=1 TO 16:C1(A)=A:C2(A)=A:NEXT A:FOR A=1 TO 16:SWAP C1(A),C1(INT(RND*16+1)):SWAP C2(A),C2(INT(RND*16+1)):NEXT A:GOSUB 750:GOTO 900
-170 REM
-180 REM chrs/colors
-190 REM
-200 SCREEN 0,,1,0:COLOR 0,0:CLS:SCREEN 0,,1,1
-210 WDTH=80/C#:V=11:H=2:EH=H+C#*WDTH:BH=H
-220 H=1:FOR C3=1 TO C#:LOCATE V-1,H+4:COLOR ZZ,0:PRINT C3:LOCATE V,H:COLOR C3(C3),0:PRINT STRING$(WDTH,CHR$(219));:H=H+WDTH:NEXT C3:COLOR ZZ,0:H=2:BH=H:EH=79:V=13:BV=V:EV=V+10
-230 LOCATE BV,BH:FOR CR=1 TO 6:PRINT  CHR$(CR)" ";:NEXT CR:PRINT CHR$(8):H=16
-240 FOR CR=14 TO 27:LOCATE V,H:PRINT CHR$(CR);:H=H+2:NEXT CR
-250 LOCATE BV,BH+42:PRINT"! "CHR$(34)" # $ % & ' ( ) * + , - . / 0 1 2 3"
-260 LOCATE BV+2,BH:PRINT"4 5 6 7 8 9 : ; < = > ? @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ["
-270 LOCATE BV+4,BH:PRINT"\ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~  Ä Å Ç É"
-280 LOCATE BV+6,BH:PRINT"Ñ Ö Ü á à â ä ã å ç é è ê ë í ì î ï ñ ó ò ô ö õ ú ù û ü † ° ¢ £ § • ¶ ß ® © ™ ´"
-290 LOCATE BV+8,BH:PRINT"¨ ≠ Æ Ø ∞ ± ≤ ¥ µ ∂ ∑ ∏ π ∫ ª º Ω æ ø ¿ ¡ ¬ √ ƒ ≈ ∆ « » …   À Ã Õ Œ œ – — “ ” ‘"
-300 LOCATE BV+10,BH:PRINT"’ ÷ ◊ ÿ Ÿ ⁄ € ‹ › ‡ · ‚ „ ‰ Â Ê Á Ë È Í Î Ï Ì Ó Ô  Ò Ú Û Ù ı ˆ ˜ ¯ ˘ ˙ ˚ ¸ ˝ ˛";
-310 H=2:BH=H:EH=BH+78:V=13:BV=V:EV=V+10
-320 FOR L=1 TO 4:CC3(N(L))=OCC3(N(L)):CCR(N(L))=OCCR(N(L)):NEXT L
-330 FOR L=1 TO 4:H(N(L))=BH+(CCR(N(L))-(INT(CCR(N(L))/40)*40)-1)*2:V(N(L))=BV+INT(CCR(N(L))/40)*2:NEXT L
-340 FOR L=1 TO PS:LOCATE V(N(L)),H(N(L)):COLOR C3(CC3(N(L))),0:PRINT CHR$(KR(CCR(N(L)))):NEXT L
-350 POKE 1050,PEEK(1052):L=1:Y1=7:X1=40:CC=ZZ:X1=28
-360 REM
-370 REM *** menu ***
-380 X1=(80-4*PS)/2
-390 LOCATE Y1,1:COLOR ZZ,0:PRINT SPACE$(X1)+" [ ";
-400 FOR A=1 TO PS-1:COLOR C3(CC3(N(A))),0:PRINT CHR$(KR(CCR(N(A))));:COLOR ZZ,0:PRINT " | ";:NEXT A
-410 COLOR C3(CC3(N(PS))),0:PRINT CHR$(KR(CCR(N(PS))));:COLOR ZZ,0:PRINT" ]"+SPACE$((80-4*PS-X1)/2)
-420 GOTO 480
-430 LOCATE Y1-1,X1+4*LCL-1:PRINT CHR$(218);CHR$(196);CHR$(191);
-440 LOCATE Y1,X1+4*LCL+1:PRINT CHR$(179);
-450 LOCATE Y1,X1+4*LCL-1:PRINT CHR$(179);
-460 LOCATE Y1+1,X1+4*LCL-1:PRINT CHR$(192);CHR$(196);CHR$(217);
-470 RETURN
-480 COLOR 0,0:GOSUB 430:COLOR 14,0:LCL=L:GOSUB 430
-490 COLOR C3(CC3(N(L))),0:LOCATE V(N(L)),H(N(L)):PRINT CHR$(KR(CCR(N(L))));:LOCATE Y1,X1+4*L:PRINT CHR$(KR(CCR(N(L))));
-500 A$=INKEY$:ON LEN(A$)+1 GOTO 500,510,570
-510 IF A$=CHR$(13) THEN FOR F=1 TO 4:OCC3(N(F))=CC3(N(F)):OCCR(N(F))=CCR(N(F)):NEXT F:AA=1:GOTO 720
-520 IF A$=CHR$(27) THEN FOR F=1 TO 4:CC3(N(F))=OCC3(N(F)):CCR(N(F))=OCCR(N(F)):NEXT F:AA=0:GOTO 730
-530 GOTO 540
+10 Rem @@@@@@@@@@ (N=N+1)====[N=N MOD RANGE+1]
+20 Rem $STATIC
+30 Rem ON A GOTO 1740,2380,3050,3150 'HAVE ERASE/REDIM/DIM STATEMENTS
+40 Clear: Screen 0, , 0, 0: Color , 0: Cls: Width 80: Randomize Timer: Locate , , 0: KEY Off: Def Seg = 64: If (Peek(16) And &H30) = &H30 Then ZZ = 7 Else ZZ = 8
+50 Def Seg = 0
+60 Dim J(4), AB$(40), C(40), FC(40), BC(40), O(40), K(40), G(10, 4), GN(40), R(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(16), C2(16), BN(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), N$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
+70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), BV(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, 16, 7), N(4), UN(4), XN(4), J$(4)
+80 Open "I", #1, "M.DF": For P = 0 To 40: Input #1, N$(P), AB$(P), FC(P), BC(P), GN(P), K(P), BN(P), C(P): Next
+90 For A = O To 5: For P = 0 To 40: Input #1, R(A, P): Next P, A: For G = 0 To 10: For P = 1 To 4: Input #1, G(G, P), B(P, G): Next P, G: For A = 1 To 240: Input #1, KR(A): Next A
+100 For A = 1 To 2: For B = 1 To 16: Input #1, CARD$(A, B, 0)
+110 For C = 1 To Val(CARD$(A, B, 0)): Input #1, CARD$(A, B, C): Next C, B, A: Close #1
+120 PLAYY = 0: SOUNDS = 1: AUTOKYBD = 0: CP = 0: CL = 1: PL = 1: E = 0: T = 0: FM = 1: PS = 4: GoSub 8570
+130 LB = 0: C# = 0: For C3 = 2 To 15: If C3 = 3 Or C3 = 6 Or C3 = 7 Or C3 = 8 Or C3 = 14 Or C3 = 15 Then 140 Else C# = C# + 1: C3(C#) = C3
+140 Next C3: For L = 1 To 4: N(L) = L: UN(L) = L: Next L
+150 KK = 8: For L = 1 To 4: CCR(N(L)) = N(L): OCCR(N(L)) = N(L): L(N(L)) = KR(N(L)): CC3(N(L)) = N(L): OCC3(N(L)) = N(L): PC(N(L)) = C3(N(L)): BV(N(L)) = 11: TP(N(L)) = 0: RTP(N(L)) = 0: CP(N(L)) = 0: X(1, N(L)) = R1 - KK + N(L): X(2, N(L)) = L1 + KK - N(L): Y(N(L)) = T1 + 4: W(N(L)) = 1500
+151 J$(L) = "Player" + Right$(Str$(L), 1): Next L: WW = 3: WH = 9
+160 CGN$ = "": L = 1: B = 0: Randomize Timer: For A = 1 To 16: C1(A) = A: C2(A) = A: Next A: For A = 1 To 16: Swap C1(A), C1(Int(Rnd * 16 + 1)): Swap C2(A), C2(Int(Rnd * 16 + 1)): Next A: GoSub 750: GoTo 900
+170 Rem
+180 Rem chrs/colors
+190 Rem
+200 Screen 0, , 1, 0: Color 0, 0: Cls: Screen 0, , 1, 1
+210 WDTH = 80 / C#: V = 11: H = 2: EH = H + C# * WDTH: BH = H
+220 H = 1: For C3 = 1 To C#: Locate V - 1, H + 4: Color ZZ, 0: Print C3: Locate V, H: Color C3(C3), 0: Print String$(WDTH, Chr$(219));: H = H + WDTH: Next C3: Color ZZ, 0: H = 2: BH = H: EH = 79: V = 13: BV = V: EV = V + 10
+230 Locate BV, BH: For CR = 1 To 6: Print Chr$(CR); " ";: Next CR: Print Chr$(8): H = 16
+240 For CR = 14 To 27: Locate V, H: Print Chr$(CR);: H = H + 2: Next CR
+250 Locate BV, BH + 42: Print "! "; Chr$(34); " # $ % & ' ( ) * + , - . / 0 1 2 3"
+260 Locate BV + 2, BH: Print "4 5 6 7 8 9 : ; < = > ? @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ["
+270 Locate BV + 4, BH: Print "\ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~  Ä Å Ç É"
+280 Locate BV + 6, BH: Print "Ñ Ö Ü á à â ä ã å ç é è ê ë í ì î ï ñ ó ò ô ö õ ú ù û ü † ° ¢ £ § • ¶ ß ® © ™ ´"
+290 Locate BV + 8, BH: Print "¨ ≠ Æ Ø ∞ ± ≤ ¥ µ ∂ ∑ ∏ π ∫ ª º Ω æ ø ¿ ¡ ¬ √ ƒ ≈ ∆ « » …   À Ã Õ Œ œ – — “ ” ‘"
+300 Locate BV + 10, BH: Print "’ ÷ ◊ ÿ Ÿ ⁄ € ‹ › ‡ · ‚ „ ‰ Â Ê Á Ë È Í Î Ï Ì Ó Ô  Ò Ú Û Ù ı ˆ ˜ ¯ ˘ ˙ ˚ ¸ ˝ ˛";
+310 H = 2: BH = H: EH = BH + 78: V = 13: BV = V: EV = V + 10
+320 For L = 1 To 4: CC3(N(L)) = OCC3(N(L)): CCR(N(L)) = OCCR(N(L)): Next L
+330 For L = 1 To 4: H(N(L)) = BH + (CCR(N(L)) - (Int(CCR(N(L)) / 40) * 40) - 1) * 2: V(N(L)) = BV + Int(CCR(N(L)) / 40) * 2: Next L
+340 For L = 1 To PS: Locate V(N(L)), H(N(L)): Color C3(CC3(N(L))), 0: Print Chr$(KR(CCR(N(L)))): Next L
+350 Poke 1050, Peek(1052): L = 1: Y1 = 7: X1 = 40: CC = ZZ: X1 = 28
+360 Rem
+370 Rem *** menu ***
+380 X1 = (80 - 4 * PS) / 2
+390 Locate Y1, 1: Color ZZ, 0: Print Space$(X1) + " [ ";
+400 For A = 1 To PS - 1: Color C3(CC3(N(A))), 0: Print Chr$(KR(CCR(N(A))));: Color ZZ, 0: Print " | ";: Next A
+410 Color C3(CC3(N(PS))), 0: Print Chr$(KR(CCR(N(PS))));: Color ZZ, 0: Print " ]" + Space$((80 - 4 * PS - X1) / 2)
+420 GoTo 480
+430 Locate Y1 - 1, X1 + 4 * LCL - 1: Print Chr$(218); Chr$(196); Chr$(191);
+440 Locate Y1, X1 + 4 * LCL + 1: Print Chr$(179);
+450 Locate Y1, X1 + 4 * LCL - 1: Print Chr$(179);
+460 Locate Y1 + 1, X1 + 4 * LCL - 1: Print Chr$(192); Chr$(196); Chr$(217);
+470 Return
+480 Color 0, 0: GoSub 430: Color 14, 0: LCL = L: GoSub 430
+490 Color C3(CC3(N(L))), 0: Locate V(N(L)), H(N(L)): Print Chr$(KR(CCR(N(L))));: Locate Y1, X1 + 4 * L: Print Chr$(KR(CCR(N(L))));
+500 A$ = InKey$: On Len(A$) + 1 GOTO 500, 510, 570
+510 If A$ = Chr$(13) Then For F = 1 To 4: OCC3(N(F)) = CC3(N(F)): OCCR(N(F)) = CCR(N(F)): Next F: AA = 1: GoTo 720
+520 If A$ = Chr$(27) Then For F = 1 To 4: CC3(N(F)) = OCC3(N(F)): CCR(N(F)) = OCCR(N(F)): Next F: AA = 0: GoTo 730
+530 GoTo 540
 540 IF VAL(A$)>C# OR VAL(A$)=0 THEN 560 ELSE FOR A=1 TO PS:IF VAL(A$)=CC3(N(A)) THEN CHCK=1
 550 NEXT A:IF CHCK THEN CHCK=0:GOTO 490 ELSE CC3(N(L))=VAL(A$):GOTO 490
 560 IF A$=CHR$(9) THEN LL=L:L=L+1:GOTO 580 ELSE 500
@@ -1228,4 +1228,3 @@
 12180 EP$=INKEY$:IF LEN(EP$)<>1 THEN 12180
 12190 IF EP$=CHR$(27) THEN EPN=0:GOSUB 7330:RETURN ELSE EPN=VAL(EP$)
 12200 IF EPN>0 AND EPN<=PS THEN GOSUB 7330:RETURN ELSE GOSUB 11280:GOTO 12180
-
