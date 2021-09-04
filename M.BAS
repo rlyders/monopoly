@@ -5,10 +5,42 @@
 50 Def Seg = 0
 60 Dim J(4), AB$(40), C(40), FC(40), BC(40), O(40), K(40), G(10, 4), GN(40), R(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(16), C2(16), BN(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), N$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
 70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), BV(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, 16, 7), N(4), UN(4), XN(4), J$(4)
-80 Open "I", #1, "M.DF": For P = 0 To 40: Input #1, N$(P), AB$(P), FC(P), BC(P), GN(P), K(P), BN(P), C(P): Next
-90 For A = O To 5: For P = 0 To 40: Input #1, R(A, P): Next P, A: For G = 0 To 10: For P = 1 To 4: Input #1, G(G, P), B(P, G): Next P, G: For A = 1 To 240: Input #1, KR(A): Next A
-100 For A = 1 To 2: For B = 1 To 16: Input #1, CARD$(A, B, 0)
-110 For C = 1 To Val(CARD$(A, B, 0)): Input #1, CARD$(A, B, C): Next C, B, A: Close #1
+
+Rem Load data file: property, cards, etc
+80 Open "I", #1, "M.DF"
+
+Rem Load 41 properties (Go is loaded twice (first and last) for some reason)
+For P = 0 To 40
+
+Rem Load property name, abbreviation, foreground color, background color, group num (property group#), kind (board space type), board num (side# of board) (1-4 or 0 - why 0?), cost
+Input #1, N$(P), AB$(P), FC(P), BC(P), GN(P), K(P), BN(P), C(P): Next
+
+Rem Load 6 rent rates x 41 properties
+90 For A = O To 5
+    For P = 0 To 40
+        Input #1, R(A, P)
+Next P, A
+
+Rem Load 11 ? x 4 ?s
+For G = 0 To 10
+    For P = 1 To 4
+        Input #1, G(G, P), B(P, G)
+Next P, G
+
+Rem Load 240 out of 256 character #s (why?)
+For A = 1 To 240
+    Input #1, KR(A)
+Next A
+
+Rem Load 2 card types (chance and community chest) x 16 cards x # of text lines
+100 For A = 1 To 2
+    For B = 1 To 16
+        Input #1, CARD$(A, B, 0)
+        110 For C = 1 To Val(CARD$(A, B, 0))
+            Input #1, CARD$(A, B, C)
+Next C, B, A
+Close #1
+
 120 PLAYY = 0: SOUNDS = 1: AUTOKYBD = 0: CP = 0: CL = 1: PL = 1: E = 0: T = 0: FM = 1: PS = 4: GoSub 8570
 130 LB = 0: C# = 0: For C3 = 2 To 15: If C3 = 3 Or C3 = 6 Or C3 = 7 Or C3 = 8 Or C3 = 14 Or C3 = 15 Then 140 Else C# = C# + 1: C3(C#) = C3
 140 Next C3: For L = 1 To 4: N(L) = L: UN(L) = L: Next L
@@ -233,7 +265,7 @@
 2320   REM  * DEAL *
 2330 IF P(N(GV))=0 THEN 11680 ELSE GOSUB 10350
 2340 DDN=0:DEAL=1:A=1:LASTP1=0:LASTA=1:SEE1=0:L=GV:Y1=T4:X1=L2+16:X1=L2:COLOR PC(N(GV)),0:POKE 1050,PEEK(1052)
-2350 LOCATE B1+1,X1-1:PRINT"[         |     |          |     |  ]
+2350 LOCATE B1+1,X1-1:PRINT"[         |     |          |     |  ]"
 2360  REM  * opening variables *
 2370 CE=E:CT=T:CPP=TP(N(GV)):V=BV(GV):FOR A1=1 TO PS:H(A1)=BH(A1):CW(N(A1))=W(N(A1)):NEXT A1:CI$=""
 2380 ERASE PD,CI:FOR A1=0 TO P(N(GV))-1:F=PP(N(GV),A1):CU(F)=U(F):CM(F)=M(F):CO(F)=O(F):NEXT A1
