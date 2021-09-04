@@ -683,7 +683,7 @@ PD(P)=PD(P)+WV
 5410 LOCATE T2+2,L2+1:PRINT "              ЏЬЫ               "
 5420 LOCATE T2+3,L2+1:PRINT "              ш ш               "
 5430 LOCATE T2+4,L2+1:PRINT " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
-5440 LOCATE T2+5,L2+1:PRINT SPACE$(SP-1)PROPERTY_NAMES$(P1)SPACE$(R2-(L2+SP+LEN(PROPERTY_NAMES$(P1)))-1)
+5440 LOCATE T2+5,L2+1:PRINT SPACE$(SP-1),PROPERTY_NAMES$(P1),SPACE$(R2-(L2+SP+LEN(PROPERTY_NAMES$(P1)))-1)
 5450 LOCATE T2+6,L2+1:PRINT " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
 5460 LOCATE T2+7,L2+1:PRINT "                                "
 5470 LOCATE T2+8,L2+1:PRINT " Rent                      $25. ":IF RL THEN 5550
@@ -707,7 +707,7 @@ PD(P)=PD(P)+WV
 5650 COLOR ZZ,0
 5660 LOCATE T2+3,L2+1:PRINT "                                "
 5670 LOCATE T2+4,L2+1:PRINT " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
-5680 LOCATE T2+5,L2+1:PRINT SPACE$(SP-1)PROPERTY_NAMES$(P1)SPACE$(R2-(L2+SP+LEN(PROPERTY_NAMES$(P1)))-1)
+5680 LOCATE T2+5,L2+1:PRINT SPACE$(SP-1),PROPERTY_NAMES$(P1),SPACE$(R2-(L2+SP+LEN(PROPERTY_NAMES$(P1)))-1)
 5690 LOCATE T2+6,L2+1:PRINT " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
 5700 LOCATE T2+7,L2+1:PRINT "                                "
 5710 LOCATE T2+8,L2+1:PRINT"   If  one  "CHR$(34)"Utility"CHR$(34)"  is  owned"
