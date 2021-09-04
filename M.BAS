@@ -1,7 +1,8 @@
 10 Rem @@@@@@@@@@ (N=N+1)====[N=N MOD RANGE+1]
 20 Rem $STATIC
 30 Rem ON A GOTO 1740,2380,3050,3150 'HAVE ERASE/REDIM/DIM STATEMENTS
-40 Clear: Screen 0, , 0, 0: Color , 0: Cls: Width 80: Randomize Timer: Locate , , 0: KEY Off: Def Seg = 64: If (Peek(16) And &H30) = &H30 Then ZZ = 7 Else ZZ = 8
+40 Clear: Screen 0, , 0, 0: Color , 0: Cls: Width 80: Randomize Timer: Locate , , 0: KEY Off: Def Seg = 64
+If (Peek(16) And &H30) = &H30 Then ZZ = 7 Else ZZ = 8
 50 Def Seg = 0
 CARDS_PER_TYPE = 16
 60 Dim J(4), PROPERTY_SHORT_NAMES$(40), PROPERTY_COST(40), PROPERTY_FOREGROUND_COLOR(40), PROPERTY_BACKGROUND_COLOR(40), O(40), PROPERTY_TYPE(40), G(10, 4), PROPERTY_GROUP_NUM(40), RENT_RATES(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(CARDS_PER_TYPE), C2(CARDS_PER_TYPE), PROPERTY_BOARD_NUM(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), PROPERTY_NAMES$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
@@ -49,11 +50,12 @@ GoSub 8570
 130 LB = 0: C# = 0
 For C3 = 2 To 15
     If C3 = 3 Or C3 = 6 Or C3 = 7 Or C3 = 8 Or C3 = 14 Or C3 = 15 Then 
-        goto 140 
-    Else 
+        _CONTINUE
+    Else
         C# = C# + 1
         C3(C#) = C3
-140 Next C3
+    End If
+Next C3
 
 For L = 1 To MAX_PLAYERS
     N(L) = L
@@ -76,7 +78,7 @@ For L = 1 To MAX_PLAYERS
     X(2, N(L)) = L1 + KK - N(L)
     Y(N(L)) = T1 + 4
     W(N(L)) = 1500
-151 J$(L) = "Player" + Right$(Str$(L), 1)
+    151 J$(L) = "Player" + Right$(Str$(L), 1)
 Next L
 
 WW = 3
@@ -167,8 +169,22 @@ On Len(KEY_PRESSED$) + 1 GOTO 500, 510, 570
 510 If KEY_PRESSED$ = Chr$(13) Then For F = 1 To MAX_PLAYERS: OCC3(N(F)) = CC3(N(F)): OCCR(N(F)) = CCR(N(F)): Next F: AA = 1: GoTo 720
 520 If KEY_PRESSED$ = Chr$(27) Then For F = 1 To MAX_PLAYERS: CC3(N(F)) = OCC3(N(F)): CCR(N(F)) = OCCR(N(F)): Next F: AA = 0: GoTo 730
 530 GoTo 540
-540 IF VAL(KEY_PRESSED$)>C# OR VAL(KEY_PRESSED$)=0 THEN 560 ELSE FOR A=1 TO NUM_OF_PLAYERS:IF VAL(KEY_PRESSED$)=CC3(N(A)) THEN CHCK=1
-550 NEXT A:IF CHCK THEN CHCK=0:GOTO 490 ELSE CC3(N(L))=VAL(KEY_PRESSED$):GOTO 490
+540 IF VAL(KEY_PRESSED$)>C# OR VAL(KEY_PRESSED$)=0 THEN 
+    GoTo 560
+ELSE 
+    FOR A=1 TO NUM_OF_PLAYERS
+        IF VAL(KEY_PRESSED$)=CC3(N(A)) THEN CHCK=1    
+    NEXT A
+
+    IF CHCK THEN 
+        CHCK=0
+        GOTO 490
+    ELSE
+        CC3(N(L))=VAL(KEY_PRESSED$)
+        GOTO 490
+    END IF
+END IF
+
 560 IF KEY_PRESSED$=CHR$(9) THEN LL=L:L=L+1:GOTO 580 ELSE 500
 570 KEY_PRESSED$=RIGHT$(KEY_PRESSED$,1):IF KEY_PRESSED$=CHR$(15) THEN LL=L:L=L-1 ELSE 600
 580 IF L>NUM_OF_PLAYERS THEN L=1 ELSE IF L<1 THEN L=NUM_OF_PLAYERS
