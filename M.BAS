@@ -3,7 +3,7 @@
 30 Rem ON A GOTO 1740,2380,3050,3150 'HAVE ERASE/REDIM/DIM STATEMENTS
 40 Clear: Screen 0, , 0, 0: Color , 0: Cls: Width 80: Randomize Timer: Locate , , 0: KEY Off: Def Seg = 64: If (Peek(16) And &H30) = &H30 Then ZZ = 7 Else ZZ = 8
 50 Def Seg = 0
-60 Dim J(4), AB$(40), C(40), FC(40), BC(40), O(40), K(40), G(10, 4), GN(40), R(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(16), C2(16), BN(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), N$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
+60 Dim J(4), AB$(40), C(40), FC(40), BC(40), O(40), K(40), G(10, 4), GN(40), RENT_RATES(6, 40), L$(4), L(4), CP(4), X(2, 4), Y(4), B(4, 11), U(40), PP(4, 28), P(4), M(40), C1(16), C2(16), BN(40), PM(40), W(4), BH(4), V(4), H(4), PC(4), N$(40), FJ(4), I(4), CH$(32), RTP(4), PD(40)
 70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), BV(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, 16, 7), N(4), UN(4), XN(4), J$(4)
 
 Rem Load data file: property, cards, etc
@@ -18,7 +18,7 @@ Input #1, N$(P), AB$(P), FC(P), BC(P), GN(P), K(P), BN(P), C(P): Next
 Rem Load 6 rent rates x 41 properties
 90 For A = O To 5
     For P = 0 To 40
-        Input #1, R(A, P)
+        Input #1, RENT_RATES(A, P)
 Next P, A
 
 Rem Load 11 ? x 4 ?s
@@ -552,12 +552,12 @@ Close #1
 5170 LOCATE ,L2+1:PRINT"北北北北北北北北北北北北北北北北"
 5180 LOCATE ,L2+1:PRINT"北北北北北北北北北北北北北北北北"
 5190 COLOR ZZ,0:SP=1/2*((R2-L2)-LEN(N$(P1))):LOCATE T2+2,L2+SP-1:PRINT " "N$(P1)" ":LOCATE T2+4,L2+1:PRINT "                                "
-5200 LOCATE T2+5,L2+1:PRINT USING"            Rent  $$##.         ";R(0,P1):IF RL THEN  5310
-5210 LOCATE T2+6,L2+1:PRINT USING" With 1 House              $###.";R(1,P1):IF RL THEN  5310
-5220 LOCATE T2+7,L2+1:PRINT USING" With 2 Houses              ###.";R(2,P1):IF RL THEN  5310
-5230 LOCATE T2+8,L2+1:PRINT USING" With 3 Houses             ####.";R(3,P1):IF RL THEN  5310
-5240 LOCATE T2+9,L2+1:PRINT USING" With 4 Houses             ####.";R(4,P1):IF RL THEN  5310
-5250 LOCATE T2+10,L2+1:PRINT USING"      With HOTEL $$####.        ";R(5,P1):IF RL THEN  5310
+5200 LOCATE T2+5,L2+1:PRINT USING"            Rent  $$##.         ";RENT_RATES(0,P1):IF RL THEN  5310
+5210 LOCATE T2+6,L2+1:PRINT USING" With 1 House              $###.";RENT_RATES(1,P1):IF RL THEN  5310
+5220 LOCATE T2+7,L2+1:PRINT USING" With 2 Houses              ###.";RENT_RATES(2,P1):IF RL THEN  5310
+5230 LOCATE T2+8,L2+1:PRINT USING" With 3 Houses             ####.";RENT_RATES(3,P1):IF RL THEN  5310
+5240 LOCATE T2+9,L2+1:PRINT USING" With 4 Houses             ####.";RENT_RATES(4,P1):IF RL THEN  5310
+5250 LOCATE T2+10,L2+1:PRINT USING"      With HOTEL $$####.        ";RENT_RATES(5,P1):IF RL THEN  5310
 5260 LOCATE T2+11,L2+1:PRINT"                               "
 5270 LOCATE T2+12,L2+1:PRINT USING"     Mortgage Value $$###.      ";1/2*C(P1)
 5280 LOCATE T2+13,L2+1:PRINT USING"     Houses cost $$###. each    ";50*BN(P1)
@@ -685,7 +685,7 @@ Close #1
 6500 P1=CP:GOSUB 5020:IF PT THEN R=10*DR
 6510 GOTO 6580
 6520 REM @@@@ RENT ON PROPERTY CARD @@@@
-6530 R=R(U(CP),CP):RL=U(CP)+2:P1=CP:GOSUB 5020
+6530 R=RENT_RATES(U(CP),CP):RL=U(CP)+2:P1=CP:GOSUB 5020
 6540 IF GN(CP)=1 OR GN(CP)=8 THEN 6550 ELSE 6560
 6550 IF RR=2 AND U(CP)=0 THEN R=2*R:GOTO 6570
 6560 IF RR=3 AND U(CP)=0 THEN R=2*R
