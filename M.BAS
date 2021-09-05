@@ -747,6 +747,7 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 4990 If PROPERTY_NAMES$(P1) = "INCOME TAX" Then PLAYY = 4: GoTo 6760
 5000 If PROPERTY_NAMES$(P1) = "GO TO JAIL" Then PLAYY = 5: GoTo 6870
 5010 If PROPERTY_TYPE(P1) < 2 Then GO2 = 0: PLAYY = 6: GoTo 7070 Else GoTo 5800
+
 5020 Rem
 5030 Rem @@@@ SHOW PROPERTY INFORMATION @@@@
 5040 Rem
@@ -777,6 +778,7 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5290 Locate T2 + 14, L2 + 1: Print Using "   Hotels, $$###. plus 4 houses "; 50 * PROPERTY_BOARD_NUM(P1)
 5300 Locate T2 + 15, L2 + 1: Print "                                ";
 5310 If RL > 0 Then RL = -RL: GoSub 10310: GoTo 5090 Else RL = 0: Return
+
 5320 Rem
 5330 Rem @@@@ DRAW A R/R CARD @@@@
 5340 Rem
@@ -801,6 +803,7 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5530 Locate T2 + 14, L2 + 1: Print " Mortgage Value           $100. "
 5540 Locate T2 + 15, L2 + 1: Print "                                ";
 5550 If RL > 0 Then RL = -RL: GoSub 10310: GoTo 5360 Else RL = 0: Return
+
 5560 Rem
 5570 Rem @@@@ DRAW A UTILITY CARD @@@@
 5580 Rem
@@ -825,6 +828,7 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5770 Locate T2 + 14, L2 + 1: Print "                                "
 5780 Locate T2 + 15, L2 + 1: Print "Mortgage Value              $75.";
 5790 If RL > 0 Then RL = -RL: GoSub 10310: GoTo 5600 Else RL = 0: Return
+
 5800 Rem
 5810 Rem @@@@ CHECK PROPERTY OWNERSHIP @@@@
 5820 Rem
@@ -837,6 +841,7 @@ If PROPERTY_OWNER(CURRENT_PROPERTY_NUM) = PLAYER_MAP(CL) Then PT_FLAG = 0: GoSub
 5860 PT_FLAG = 0: GoSub 11570: PLAYY = 10
 GoSub 5870
 GoTo 7070
+
 5870 Rem
 5880 Rem * BLINK PROPERTY *
 5890 Rem
@@ -1138,10 +1143,12 @@ GoTo 7390
 7550 If PLAYER_OWES_MONEY_STATUS = 0 Then C2 = C2 + 1: If C2 > CARDS_PER_TYPE Then C2 = 1
 7560 HIDDEN_INPUT_KEYS_TO_ACCEPT = 2: GoSub 11180: If HIDDEN_INPUT_KEYS_TO_ACCEPT = 2 Then COMMUNITY_CHEST_CARDS(C2) = INK
 7570 CARD = COMMUNITY_CHEST_CARDS(C2): If J2 And CARD = 14 Then 7550
-7580 Color 0, 9 - SC * 3: For A = 1 To Val(CARD$(SC, CARD, 0))
-    7590 Locate T3 + (7 - Val(CARD$(SC, CARD, 0)) - 1) / 2 + A - 1, L3 + (30 - Len(CARD$(SC, CARD, A)) + 1) / 2
-7600 Print CARD$(SC, CARD, A);: Next A: Return
-7610 Return
+7580 Color 0, 9 - SC * 3
+For A = 1 To Val(CARD$(SC, CARD, 0))
+    Locate Fix(T3 + (7 - Val(CARD$(SC, CARD, 0)) - 1) / 2 + A - 1)+1, Fix(L3 + (30 - Len(CARD$(SC, CARD, A)) + 1) / 2)+1
+    Print CARD$(SC, CARD, A);
+Next A
+Return
 
 7620 Rem
 7630 Rem @@@@ CARRY OUT CHANGES/EFFECTS OF CARDS @@@@
