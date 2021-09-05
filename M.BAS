@@ -751,7 +751,7 @@ If J(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5410 Locate T2 + 2, L2 + 1: Print "              ЏЬЫ               "
 5420 Locate T2 + 3, L2 + 1: Print "              ш ш               "
 5430 Locate T2 + 4, L2 + 1: Print " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
-5440 Locate T2 + 5, L2 + 1: Print Space$(SP - 1), PROPERTY_NAMES$(P1), Space$(R2 - (L2 + SP + Len(PROPERTY_NAMES$(P1))) - 1)
+5440 Locate T2 + 5, L2 + 1: Print Space$(SP - 1)+PROPERTY_NAMES$(P1)+Space$(R2 - (L2 + SP + Len(PROPERTY_NAMES$(P1))) - 1)
 5450 Locate T2 + 6, L2 + 1: Print " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
 5460 Locate T2 + 7, L2 + 1: Print "                                "
 5470 Locate T2 + 8, L2 + 1: Print " Rent                      $25. ": If RL Then 5550
@@ -775,7 +775,7 @@ If J(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5650 Color COLOR_ZZ, 0
 5660 Locate T2 + 3, L2 + 1: Print "                                "
 5670 Locate T2 + 4, L2 + 1: Print " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
-5680 Locate T2 + 5, L2 + 1: Print Space$(SP - 1), PROPERTY_NAMES$(P1), Space$(R2 - (L2 + SP + Len(PROPERTY_NAMES$(P1))) - 1)
+5680 Locate T2 + 5, L2 + 1: Print Space$(SP - 1)+PROPERTY_NAMES$(P1)+Space$(R2 - (L2 + SP + Len(PROPERTY_NAMES$(P1))) - 1)
 5690 Locate T2 + 6, L2 + 1: Print " ДДДДДДДДДДДДДДДДДДДДДДДДДДДДДД "
 5700 Locate T2 + 7, L2 + 1: Print "                                "
 5710 Locate T2 + 8, L2 + 1: Print "   If  one  "; Chr$(34); "Utility"; Chr$(34); "  is  owned"
