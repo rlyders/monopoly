@@ -635,9 +635,19 @@ Next D
 4440 Rem
 4450 Rem @@@@ DOUBLES @@@@
 4460 Rem
-4470 If DIE1_ROLLED <> DIE2_ROLLED Then 4540 Else If DOUBLES_IN_ROW_COUNT < 2 Then PLY$ = "A" Else PLY$ = "<A"
+4470 If DIE1_ROLLED <> DIE2_ROLLED Then 
+    Goto 4540
+ElseIf DOUBLES_IN_ROW_COUNT < 2 Then 
+    PLY$ = "A"
+Else 
+    PLY$ = "<A"
+End If
 4480 Locate B1 + 1, L2 + 13: Color 30, 1: Print "Doubles"
-4490 If SOUNDS Then Play "Mf O3 A64 P64 A64 P64 A64 P32 X" + VarPtr$(PLY$)
+4490 If SOUNDS Then 
+    PLAY_SUFFIX$ = VarPtr$(PLY$)
+    REM TODO fix the following which results in an Illegal function call
+    REM Play "Mf O3 A64 P64 A64 P64 A64 P32 X" + PLAY_SUFFIX$
+End if
 4500 GoSub 10310: Locate B1 + 1, L2 + 13: Color , 0: Print "       "
 4510 If J(PLAYER_MAP(CL)) Then Locate Y, X: Color , 0: Print " ": J(PLAYER_MAP(CL)) = 0: Y = T1 + 4: Y(PLAYER_MAP(CL)) = Y: DOUBLES_IN_ROW_COUNT = 0: GoTo 4590
 4520 DOUBLES_IN_ROW_COUNT = DOUBLES_IN_ROW_COUNT + 1: If DOUBLES_IN_ROW_COUNT < 3 Then GoSub 11530: GoTo 4590 Else Locate Y, X: Color , 0: Print " ": DOUBLES_IN_ROW_COUNT = 0: J(PLAYER_MAP(CL)) = 1
