@@ -5,8 +5,8 @@
 If (Peek(16) And &H30) = &H30 Then COLOR_ZZ = 7 Else COLOR_ZZ = 8
 50 Def Seg = 0
 CARDS_PER_TYPE = 16
-60 Dim PLAYER_DAYS_IN_JAIL(4), PROPERTY_SHORT_NAMES$(40), PROPERTY_COST(40), PROPERTY_FOREGROUND_COLOR(40), PROPERTY_BACKGROUND_COLOR(40), PROPERTY_OWNER(40), PROPERTY_TYPE(40), G(10, 4), PROPERTY_GROUP_NUM(40), RENT_RATES(6, 40), L$(4), L(4), PLAYER_CURRENT_PROPERTY(4), PLAYER_LOCATION_X(2, 4), PLAYER_LOCATION_Y(4), B(4, 11), PROPERTY_HOUSES(40), PP(4, 28), PLAYER_P(4), PROPERTY_M(40), CHANCE_CARDS(CARDS_PER_TYPE), COMMUNITY_CHEST_CARDS(CARDS_PER_TYPE), PROPERTY_BOARD_NUM(40), PM(40), PLAYER_CASH(4), BH(4), V(4), H(4), PLAYER_COLOR(4), PROPERTY_NAMES$(40), FPLAYER_DAYS_IN_JAIL(4), I(4), CH$(32), RTP(4), PD(40)
-70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), BV(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, CARDS_PER_TYPE, 7), PLAYER_MAP(4), PLAYER_UNMAP(4), PLAYER_XN(4), J$(4)
+60 Dim PLAYER_DAYS_IN_JAIL(4), PROPERTY_SHORT_NAMES$(40), PROPERTY_COST(40), PROPERTY_FOREGROUND_COLOR(40), PROPERTY_BACKGROUND_COLOR(40), PROPERTY_OWNER(40), PROPERTY_TYPE(40), G(10, 4), PROPERTY_GROUP_NUM(40), RENT_RATES(6, 40), L$(4), L(4), PLAYER_CURRENT_PROPERTY(4), PLAYER_LOCATION_X(2, 4), PLAYER_LOCATION_Y(4), B(4, 11), PROPERTY_HOUSES(40), PP(4, 28), PLAYER_P(4), PROPERTY_M(40), CHANCE_CARDS(CARDS_PER_TYPE), COMMUNITY_CHEST_CARDS(CARDS_PER_TYPE), PROPERTY_BOARD_NUM(40), PM(40), PLAYER_CASH(4), Player_Properties_Left(4), V(4), H(4), PLAYER_COLOR(4), PROPERTY_NAMES$(40), FPLAYER_DAYS_IN_JAIL(4), I(4), CH$(32), RTP(4), PD(40)
+70 Dim CM(40), CU(40), CI(40), CW(40), CO(40), KR(240), C3(11), TP(4), Player_Properties_Top(4), PPN(40), CC3(4), CCR(4), GN$(60), KY$(11), HB(10), O$(8), OO$(8), OO(8), OCCR(4), OCC3(4), CARD$(2, CARDS_PER_TYPE, 7), PLAYER_MAP(4), PLAYER_UNMAP(4), PLAYER_XN(4), J$(4)
 
 Rem Load data file: property, cards, etc
 80 Open "I", #1, "M.DF"
@@ -70,13 +70,13 @@ For L = 1 To MAX_PLAYERS
     CC3(PLAYER_MAP(L)) = PLAYER_MAP(L)
     OCC3(PLAYER_MAP(L)) = PLAYER_MAP(L)
     PLAYER_COLOR(PLAYER_MAP(L)) = C3(PLAYER_MAP(L))
-    BV(PLAYER_MAP(L)) = 11
+    Player_Properties_Top(PLAYER_MAP(L)) = 11
     TP(PLAYER_MAP(L)) = 0
     RTP(PLAYER_MAP(L)) = 0
     PLAYER_CURRENT_PROPERTY(PLAYER_MAP(L)) = 0
-    PLAYER_LOCATION_X(1, PLAYER_MAP(L)) = R1 - KK + PLAYER_MAP(L)
-    PLAYER_LOCATION_X(2, PLAYER_MAP(L)) = L1 + KK - PLAYER_MAP(L)
-    PLAYER_LOCATION_Y(PLAYER_MAP(L)) = T1 + 4
+    PLAYER_LOCATION_X(1, PLAYER_MAP(L)) = Board_Right - KK + PLAYER_MAP(L)
+    PLAYER_LOCATION_X(2, PLAYER_MAP(L)) = Board_Left + KK - PLAYER_MAP(L)
+    PLAYER_LOCATION_Y(PLAYER_MAP(L)) = Board_Top + 4
     PLAYER_CASH(PLAYER_MAP(L)) = 1500
     151 J$(L) = "Player" + Right$(Str$(L), 1)
 Next L
@@ -205,22 +205,29 @@ End If
 720 For L = 1 To NUM_OF_PLAYERS: L(PLAYER_MAP(L)) = KR(CCR(PLAYER_MAP(L))): PLAYER_COLOR(PLAYER_MAP(L)) = C3(CC3(PLAYER_MAP(L))): Next L
 730 If AA = 1 Then Cls: Screen 0, , 0, 1: Color 0, 0: Cls
 740 Screen 0, , 0, 0: Return
-750 Poke 1050, Peek(1052): Color COLOR_ZZ, 0: Locate , , 0, 7, 0: Cls: Locate T1, L1: Print "«ƒƒƒƒƒƒƒƒƒ≈ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ≈ƒƒƒƒƒƒƒƒƒ∂"
-760 Locate T1 + 1, L1: Print "∫         ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥         ∫"
-770 Locate T1 + 2, L1: Print "∫         ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥         ∫"
-780 Locate T1 + 3, L1: Print "∫         ≥     ≥     ≥     ≥     ≥";: Color 7: Print " è‹€";: Color COLOR_ZZ: Print " ≥     ≥     ≥     ≥     ≥         ∫"
-790 Locate T1 + 4, L1: Print "∫         ≥     ≥     ≥     ≥     ≥";: Color 7: Print " ¯ ¯";: Color COLOR_ZZ: Print " ≥     ≥     ≥     ≥     ≥         ∫"
-800 Locate T1 + 5, L1: Print "»ÕÕÕÕÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕÕÕÕÕº": Color COLOR_ZZ, 0: GoSub 8570
+750 Poke 1050, Peek(1052): Color COLOR_ZZ, 0: Locate , , 0, 7, 0: Cls: Locate Board_Top, Board_Left: Print "«ƒƒƒƒƒƒƒƒƒ≈ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ¬ƒƒƒƒƒ≈ƒƒƒƒƒƒƒƒƒ∂"
+760 Locate Board_Top + 1, Board_Left: Print "∫         ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥         ∫"
+770 Locate Board_Top + 2, Board_Left: Print "∫         ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥     ≥         ∫"
+780 Locate Board_Top + 3, Board_Left: Print "∫         ≥     ≥     ≥     ≥     ≥";: Color 7: Print " è‹€";: Color COLOR_ZZ: Print " ≥     ≥     ≥     ≥     ≥         ∫"
+790 Locate Board_Top + 4, Board_Left: Print "∫         ≥     ≥     ≥     ≥     ≥";: Color 7: Print " ¯ ¯";: Color COLOR_ZZ: Print " ≥     ≥     ≥     ≥     ≥         ∫"
+800 Locate Board_Top + 5, Board_Left: Print "»ÕÕÕÕÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕÕÕÕÕº": Color COLOR_ZZ, 0: GoSub 8570
 810 GoSub 11530: GoSub 11610: GoSub 11570
-820 Locate T2, L2: Print "…ÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕª"
-830 For A = 1 To 16: Locate T2 + A, L2: Print "∫";: Locate , R2: Print "∫";: Next A
-840 Locate B2, L2: Print "»ÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕº";
-850 For L = 1 To NUM_OF_PLAYERS: Color PLAYER_COLOR(PLAYER_MAP(L)), 0: Locate T6, BH(L) - 1: Print "…ÕÕÕÕÕÕÕÕÕª"
-    860 For V = T6 + 1 To BV(L) + W# - 1
-        Locate V, BH(L) - 1: Print "∫";: Locate V, BH(L) + W6: Print "∫";
+820 Locate Action_Window_Top, Action_Window_Left: Print "…ÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕª"
+830 For A = 1 To 16: Locate Action_Window_Top + A, Action_Window_Left: Print "∫";: Locate , Action_Window_Right: Print "∫";: Next A
+840 Locate Action_Window_Bottom, Action_Window_Left: Print "»ÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕÕº";
+850 For L = 1 To NUM_OF_PLAYERS
+    Color PLAYER_COLOR(PLAYER_MAP(L)), 0
+    Locate Player_Column_Top, Player_Properties_Left(L) - 1
+    Print "…ÕÕÕÕÕÕÕÕÕª"
+    For V = Player_Column_Top + 1 To Player_Properties_Top(L) + Player_Column_Inner_Height - 1
+        Locate V, Player_Properties_Left(L) - 1
+        Print "∫";
+        Locate V, Player_Properties_Left(L) + Player_Column_Inner_Width
+        Print "∫";
     Next V
-    870 GoSub 1510 'LOCATE T6+2,BH(L)-1:PRINT CHR$(199);STRING$(9,196);CHR$(182)
-880 Locate BV(L) + W#, BH(L) - 1: Print "»ÕÕÕÕÕÕÕÕÕº";
+    GoSub 1510 'LOCATE Player_Column_Top+2,Player_Properties_Left(L)-1:PRINT CHR$(199);STRING$(9,196);CHR$(182)
+    Locate Player_Properties_Top(L) + Player_Column_Inner_Height, Player_Properties_Left(L) - 1
+    Print "»ÕÕÕÕÕÕÕÕÕº";
 Next L
 Return
 
@@ -228,7 +235,7 @@ Return
 900 Rem   @@@@@@@@ MONOPOLY @@@@@@@@@@
 910 Rem
 920 For L = 1 To NUM_OF_PLAYERS
-    H(PLAYER_MAP(L)) = BH(PLAYER_MAP(L))
+    H(PLAYER_MAP(L)) = Player_Properties_Left(PLAYER_MAP(L))
     GoSub 7240
     GoSub 1390
     Show_Player_Bail_Cards(L)
@@ -249,27 +256,27 @@ Next L
 1000 GoSub 12020: SB = PROPERTY_BOARD_NUM(CURRENT_PROPERTY_NUM)
 1010 GoSub 1020: GoTo 1260
 1020 If SB = LB And SG = 0 Then Return
-1030 BX = R1 - 9: BXX = R1 - 9: BB = B(SB, 0): If LB <> SB Then GoSub 1230
-1040 GoSub 1060: GoSub 1150: BXX = L1 + 1: BX = L1 + 2: BB = B(SB, 10): GoSub 1060: GoSub 1240
+1030 BX = Board_Right - 9: BXX = Board_Right - 9: BB = B(SB, 0): If LB <> SB Then GoSub 1230
+1040 GoSub 1060: GoSub 1150: BXX = Board_Left + 1: BX = Board_Left + 2: BB = B(SB, 10): GoSub 1060: GoSub 1240
 1050 LB = SB
 Return
 
-1060 If BB <> 10 Then Color COLOR_ZZ, 0: Locate T1, BX + 1: Print String$(6, 196): Locate T1 + 1, BX + 1: Print Space$(6)
+1060 If BB <> 10 Then Color COLOR_ZZ, 0: Locate Board_Top, BX + 1: Print String$(6, 196): Locate Board_Top + 1, BX + 1: Print Space$(6)
 1070 On BB / 10 + 1 GOTO 1080, 1090, 1110, 1120
-1080 Color 4, 0: Locate T1 + 2, BXX: Print "         ": Locate T1 + 3, BXX: Print "   "; Chr$(27); "GO   ": GoTo 1130
-1090 Color COLOR_ZZ, 0: Locate T1, BX + 1: Print Chr$(194) + String$(4, 196) + Chr$(194): Locate T1 + 1, BX + 1: Print Chr$(179): Locate T1 + 1, BX + 6: Print Chr$(179): Locate T1 + 2, BX + 1: Print Chr$(192) + String$(4, 196) + Chr$(217)
-1100 Color 6, 0: Locate T1 + 3, BX: Print "  JAIL  ": GoTo 1130
-1110 Color 4, 0: Locate T1 + 2, BXX: Print "  FREE   ": Locate T1 + 3, BXX: Print " PARKING ": GoTo 1130
-1120 Color 11, 0: Locate T1 + 2, BXX: Print "  GO TO  ": Locate T1 + 3, BXX: Print "  JAIL   ": GoTo 1130
+1080 Color 4, 0: Locate Board_Top + 2, BXX: Print "         ": Locate Board_Top + 3, BXX: Print "   "; Chr$(27); "GO   ": GoTo 1130
+1090 Color COLOR_ZZ, 0: Locate Board_Top, BX + 1: Print Chr$(194) + String$(4, 196) + Chr$(194): Locate Board_Top + 1, BX + 1: Print Chr$(179): Locate Board_Top + 1, BX + 6: Print Chr$(179): Locate Board_Top + 2, BX + 1: Print Chr$(192) + String$(4, 196) + Chr$(217)
+1100 Color 6, 0: Locate Board_Top + 3, BX: Print "  JAIL  ": GoTo 1130
+1110 Color 4, 0: Locate Board_Top + 2, BXX: Print "  FREE   ": Locate Board_Top + 3, BXX: Print " PARKING ": GoTo 1130
+1120 Color 11, 0: Locate Board_Top + 2, BXX: Print "  GO TO  ": Locate Board_Top + 3, BXX: Print "  JAIL   ": GoTo 1130
 1130 Return
 
 1140 Rem show properties
-1150 BF = 5: For P = 1 To 9: BX = R1 - 15 - 6 * (P - 1): BP = B(SB, P)
-    1160 Color 0, 0: If PROPERTY_TYPE(B(SB, P)) = 1 Or PROPERTY_GROUP_NUM(BP) = 10 Then Locate T1 + 1, BX: Print "     ": Locate T1 + 3, BX: GoTo 1180 Else If PROPERTY_GROUP_NUM(BP) <> 9 Then Locate T1 + 3, BX: Print "     "
-    1170 Locate T1 + 1, BX
+1150 BF = 5: For P = 1 To 9: BX = Board_Right - 15 - 6 * (P - 1): BP = B(SB, P)
+    1160 Color 0, 0: If PROPERTY_TYPE(B(SB, P)) = 1 Or PROPERTY_GROUP_NUM(BP) = 10 Then Locate Board_Top + 1, BX: Print "     ": Locate Board_Top + 3, BX: GoTo 1180 Else If PROPERTY_GROUP_NUM(BP) <> 9 Then Locate Board_Top + 3, BX: Print "     "
+    1170 Locate Board_Top + 1, BX
     1180 If PROPERTY_GROUP_NUM(BP) <> 10 Then GoSub 10880 Else Color COLOR_ZZ - PROPERTY_M(BP), 0: Print " "; PROPERTY_SHORT_NAMES$(BP); " ";
     1190 Rem
-    1200 Color 2: Locate T1 + 2, (B(SB, 10) - BP - 1) * 6 + 11 + L1
+    1200 Color 2: Locate Board_Top + 2, (B(SB, 10) - BP - 1) * 6 + 11 + Board_Left
     1210 CU(BP) = PROPERTY_HOUSES(BP): GoSub 11050
 1220 Next P
 Return
@@ -296,7 +303,7 @@ If BACK_TO_BACK_DOUBLES_COUNT Then 1360
 1340 If FM = 0 Then CL = CL + 1: If CL > NUM_OF_PLAYERS Then CL = 1 Else If CL < 1 Then CL = NUM_OF_PLAYERS
 1350 BACK_TO_BACK_DOUBLES_COUNT = 0: PLAYY = 0
 1360 FM = 0: CURRENT_PROPERTY_NUM = PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL)): PO = CURRENT_PROPERTY_NUM: LP = CURRENT_PROPERTY_NUM
-1370 Y = PLAYER_LOCATION_Y(PLAYER_MAP(CL)): NY = Y: X = PLAYER_LOCATION_X(1, PLAYER_MAP(CL)): LX = X: For L = 1 To NUM_OF_PLAYERS: H(PLAYER_MAP(L)) = BH(PLAYER_MAP(L)): Next L: RR = 0: R = 0
+1370 Y = PLAYER_LOCATION_Y(PLAYER_MAP(CL)): NY = Y: X = PLAYER_LOCATION_X(1, PLAYER_MAP(CL)): LX = X: For L = 1 To NUM_OF_PLAYERS: H(PLAYER_MAP(L)) = Player_Properties_Left(PLAYER_MAP(L)): Next L: RR = 0: R = 0
 1380 GoSub 1860
 GoTo 1930
 
@@ -304,29 +311,29 @@ GoTo 1930
 1400 Rem @@@@ SHOW PLAYER'S WEALTH @@@@
 1410 Rem
 1420 Color PLAYER_COLOR(PLAYER_MAP(L)), 0
-1430 If PLAYER_CASH(PLAYER_MAP(L)) < 1000000! Then Locate BV(L) - 2, BH(L): Print Using "$$#####,"; PLAYER_CASH(PLAYER_MAP(L)) Else Locate BV(L) - 2, BH(L): Print Using "$$#######"; PLAYER_CASH(PLAYER_MAP(L))
+1430 If PLAYER_CASH(PLAYER_MAP(L)) < 1000000! Then Locate Player_Properties_Top(L) - 2, Player_Properties_Left(L): Print Using "$$#####,"; PLAYER_CASH(PLAYER_MAP(L)) Else Locate Player_Properties_Top(L) - 2, Player_Properties_Left(L): Print Using "$$#######"; PLAYER_CASH(PLAYER_MAP(L))
 1440 Return
 
 1450 Rem
 1460 Rem @@@@ SHOW PLAYER'S EXCHANGE @@@@
 1470 Rem
-1480 Color 14, 1: If PLAYER_EXCHANGE < 100000! Then Locate BV(L) - 1, BH(L): Print Using "+$$####,"; PLAYER_EXCHANGE;: Print " " Else Locate BV(L) - 1, BH(L): Print Using "+$$#####,"; PLAYER_EXCHANGE
+1480 Color 14, 1: If PLAYER_EXCHANGE < 100000! Then Locate Player_Properties_Top(L) - 1, Player_Properties_Left(L): Print Using "+$$####,"; PLAYER_EXCHANGE;: Print " " Else Locate Player_Properties_Top(L) - 1, Player_Properties_Left(L): Print Using "+$$#####,"; PLAYER_EXCHANGE
 1490 Return
 
 1500 Rem
 1510 Rem @@@@ UNDO PLAYER'S EXCHANGE @@@@
 1520 Rem
-1521 Locate BV(L) - 1, BH(L) - 1: Color PLAYER_COLOR(PLAYER_MAP(L)), 0: PSS = Int(1 / 2 * WH - 1 / 2 * Len(J$(PLAYER_MAP(L))))
+1521 Locate Player_Properties_Top(L) - 1, Player_Properties_Left(L) - 1: Color PLAYER_COLOR(PLAYER_MAP(L)), 0: PSS = Int(1 / 2 * WH - 1 / 2 * Len(J$(PLAYER_MAP(L))))
 1522 Print "«" + String$(PSS, Chr$(196)) + J$(PLAYER_MAP(L));
-1523 PSS = BH(L) + WH - Pos(0): Print String$(PSS, Chr$(196)) + "∂": Return
-1530 Color PLAYER_COLOR(PLAYER_MAP(L)), 0: Locate BV(L) - 1, BH(L) - 1: Print "«ƒƒƒƒƒƒƒƒƒ∂"
+1523 PSS = Player_Properties_Left(L) + WH - Pos(0): Print String$(PSS, Chr$(196)) + "∂": Return
+1530 Color PLAYER_COLOR(PLAYER_MAP(L)), 0: Locate Player_Properties_Top(L) - 1, Player_Properties_Left(L) - 1: Print "«ƒƒƒƒƒƒƒƒƒ∂"
 Return
 
 1600 Rem
 1610 Rem @@@@ COUNT PLAYER'S PROPERTIES @@@@
 1620 Rem
-1630 H(L) = BH(L)
-V = BV(L)
+1630 H(L) = Player_Properties_Left(L)
+V = Player_Properties_Top(L)
 1640 PP = 0
 For P = 1 To 39 ' loop through all properties except GO
     If PROPERTY_OWNER(P) <> PLAYER_MAP(L) Or PROPERTY_GROUP_NUM(P) >= 9 Then 1660 Else If RTP(PLAYER_MAP(L)) = P Then TP(PLAYER_MAP(L)) = PP
@@ -346,24 +353,24 @@ If PLAYER_P(PLAYER_MAP(L)) <= 14 Then TP(PLAYER_MAP(L)) = 0: RTP(PLAYER_MAP(L)) 
 1720 Rem @@@@ SHOW COLUMN OF PROPERTIES @@@@
 1730 Rem
 1740 Erase PD: For A1 = 0 To PLAYER_P(PLAYER_MAP(L)) - 1: A2 = PP(PLAYER_MAP(L), A1): CM(A2) = PROPERTY_M(A2): CO(A2) = PROPERTY_OWNER(A2): CU(A2) = PROPERTY_HOUSES(A2): CI(A2) = 0: Next A1: TP(PLAYER_MAP(L)) = PPN(RTP(PLAYER_MAP(L))) - 1: If TP(PLAYER_MAP(L)) < 0 Then TP(PLAYER_MAP(L)) = 0
-1750 BF = 0: PP = TP(PLAYER_MAP(L)): For V = BV(L) To BV(L) + W# - 1
-    1760 If PP > PLAYER_P(PLAYER_MAP(L)) - 1 Then If PLAYER_P(PLAYER_MAP(L)) > W# Then PP = 0 Else GoTo 1820
-    1770 If PP = TP(PLAYER_MAP(L)) And V > BV(L) Then 1820 Else P = PP(PLAYER_MAP(L), PP)
+1750 BF = 0: PP = TP(PLAYER_MAP(L)): For V = Player_Properties_Top(L) To Player_Properties_Top(L) + Player_Column_Inner_Height - 1
+    1760 If PP > PLAYER_P(PLAYER_MAP(L)) - 1 Then If PLAYER_P(PLAYER_MAP(L)) > Player_Column_Inner_Height Then PP = 0 Else GoTo 1820
+    1770 If PP = TP(PLAYER_MAP(L)) And V > Player_Properties_Top(L) Then 1820 Else P = PP(PLAYER_MAP(L), PP)
     1780 Locate V, H(L): BP = P: If CO(P) <> PROPERTY_OWNER(P) Then MPC = PLAYER_COLOR(CO(P)) Else MPC = COLOR_ZZ - CM(P)
     1790 GoSub 10920: If CU(P) Then GoSub 11050: GoTo 1810
     1800 If PD(P) Then Color 14 * (1 + (PD(P) < 0)), 1: Print Using "####"; PD(P); Else Color , 0: Print "    ";
     1810 PP = PP + 1
 1820 Next V
-1830 Color , 0: For A1 = BV(L) + PLAYER_P(PLAYER_MAP(L)) To BV(L) + W# - 1
-    1840 Locate A1, BH(L): Print "         ";
+1830 Color , 0: For A1 = Player_Properties_Top(L) + PLAYER_P(PLAYER_MAP(L)) To Player_Properties_Top(L) + Player_Column_Inner_Height - 1
+    1840 Locate A1, Player_Properties_Left(L): Print "         ";
 1850 Next A1: If DEAL_FLAG Then Return Else Return 'FOR A1=0 TO PLAYER_P(PLAYER_MAP(L))-1:A2=PP(PLAYER_MAP(L),A1):CM(A2)=0:CO(A2)=0:CU(A2)=0:NEXT A1:RETURN
 
 1860 Rem
 1870 Rem @@@@ SHOW HOUSES/HOTELS LEFT @@@@
 1880 Rem
 1890 CT = T: CE = E
-1900 Color 2, 0: Locate B2 + 1, L2: Print Using "##"; 32 - CE;
-1910 Color 4, 0: Locate B2 + 1, L2 + 31: Print Using "##"; 12 - CT;
+1900 Color 2, 0: Locate Action_Window_Bottom + 1, Action_Window_Left: Print Using "##"; 32 - CE;
+1910 Color 4, 0: Locate Action_Window_Bottom + 1, Action_Window_Left + 31: Print Using "##"; 12 - CT;
 1920 Return
 
 1930 Rem
@@ -391,7 +398,7 @@ On AA + 1 GOTO 2040, 4300, 11650, 2060, 10410
 2070 If NUM_OF_PLAYERS = 2 Then If PLAYER_PL = 1 Then PLAYER_PL = 2 Else PLAYER_PL = 1 Else GoTo 2110
 2080 GoTo 11670
 2110 GoSub 12161: If EPN = 0 Then GoSub 7330: GoTo 1940
-2120 A = EPN: If PLAYER_P(PLAYER_MAP(A)) = 0 And PLAYER_DAYS_IN_JAIL(PLAYER_MAP(A)) = 0 And FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(A)) = 0 And PLAYER_CASH(PLAYER_MAP(A)) = 0 And A <> CL Then GoSub 11280: Color 7, 0: Locate B1 + 1, L2 + 2: GoSub 11280: Print Using "Player # has no assets"; PLAYER_MAP(A): GoSub 10310: GoSub 7330: GoTo 1940
+2120 A = EPN: If PLAYER_P(PLAYER_MAP(A)) = 0 And PLAYER_DAYS_IN_JAIL(PLAYER_MAP(A)) = 0 And FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(A)) = 0 And PLAYER_CASH(PLAYER_MAP(A)) = 0 And A <> CL Then GoSub 11280: Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 2: GoSub 11280: Print Using "Player # has no assets"; PLAYER_MAP(A): GoSub 10310: GoSub 7330: GoTo 1940
 2130 PLAYER_PL = Val(KEY_PRESSED$)
 GoTo 11670
 
@@ -408,16 +415,16 @@ GoTo 11670
 2250 If J1 = PLAYER_MAP(PLAYER_PL) Then J1 = 0 Else J2 = 0
 2260 L = CL: Show_Player_Bail_Cards(L): FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(PLAYER_PL)) = FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(PLAYER_PL)) - 1: PLAYER_DAYS_IN_JAIL(PLAYER_MAP(PLAYER_PL)) = 0
 2270 Color PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)), 0: If PROPERTY_BOARD_NUM(PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL))) < 3 Then Locate PLAYER_LOCATION_Y(PLAYER_MAP(PLAYER_PL)), PLAYER_LOCATION_X(PLAYER_XN(PLAYER_MAP(PLAYER_PL)), PLAYER_MAP(PLAYER_PL)): Print " "
-2280 PLAYER_LOCATION_Y(PLAYER_MAP(PLAYER_PL)) = T1 + 4: If CL = PLAYER_PL Then Y = PLAYER_LOCATION_Y(PLAYER_MAP(PLAYER_PL))
+2280 PLAYER_LOCATION_Y(PLAYER_MAP(PLAYER_PL)) = Board_Top + 4: If CL = PLAYER_PL Then Y = PLAYER_LOCATION_Y(PLAYER_MAP(PLAYER_PL))
 2290 If PROPERTY_BOARD_NUM(PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL))) < 3 Then Locate PLAYER_LOCATION_Y(PLAYER_MAP(PLAYER_PL)), PLAYER_LOCATION_X(PLAYER_XN(PLAYER_MAP(L)), PLAYER_MAP(PLAYER_PL)): Print Chr$(L(PLAYER_MAP(PLAYER_PL)))
 2300 L = PLAYER_PL: GoSub 7240: If NOROLL Then NOROLL = 0: GoTo 4570 Else GoTo 11650
 2310 Rem
 2320 Rem  * DEAL *
 2330 If PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) = 0 Then 11680 Else GoSub 10350
-2340 DDN = 0: DEAL_FLAG = 1: A = 1: LASTP1 = 0: LASTA = 1: SEE1 = 0: L = TRADING_PLAYER_A: Y1 = T4: X1 = L2 + 16: X1 = L2: Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Poke 1050, Peek(1052)
-2350 Locate B1 + 1, X1 - 1: Print "[         |     |          |     |  ]"
+2340 DDN = 0: DEAL_FLAG = 1: A = 1: LASTP1 = 0: LASTA = 1: SEE1 = 0: L = TRADING_PLAYER_A: Y1 = Menu_Top: X1 = Action_Window_Left + 16: X1 = Action_Window_Left: Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Poke 1050, Peek(1052)
+2350 Locate Board_Bottom + 1, X1 - 1: Print "[         |     |          |     |  ]"
 2360 Rem  * opening variables *
-2370 CE = E: CT = T: CPP = TP(PLAYER_MAP(TRADING_PLAYER_A)): V = BV(TRADING_PLAYER_A): For A1 = 1 To NUM_OF_PLAYERS: H(A1) = BH(A1): CW(PLAYER_MAP(A1)) = PLAYER_CASH(PLAYER_MAP(A1)): Next A1: CI$ = ""
+2370 CE = E: CT = T: CPP = TP(PLAYER_MAP(TRADING_PLAYER_A)): V = Player_Properties_Top(TRADING_PLAYER_A): For A1 = 1 To NUM_OF_PLAYERS: H(A1) = Player_Properties_Left(A1): CW(PLAYER_MAP(A1)) = PLAYER_CASH(PLAYER_MAP(A1)): Next A1: CI$ = ""
 2380 Erase PD, CI: For A1 = 0 To PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1: F = PP(PLAYER_MAP(TRADING_PLAYER_A), A1): CU(F) = PROPERTY_HOUSES(F): CM(F) = PROPERTY_M(F): CO(F) = PROPERTY_OWNER(F): Next A1
 2390 GoSub 2460: GoSub 2400: GoTo 2620
 2400 Rem * display info *
@@ -509,7 +516,7 @@ Next L
     3200 If DDN Or L = TRADING_PLAYER_A Then GoSub 1600: GoSub 1750
 3210 Next L: GoSub 12020: P = PPP: GoTo 3020
 3220 Rem  * see *
-3230 P1 = PP(PLAYER_MAP(TRADING_PLAYER_A), CPP): If P1 = LASTP1 Then LASTP1 = 0: GoSub 7020: Return Else SEE1 = SEE1 + 1: Color COLOR_ZZ, 0: Locate T2, L2 + 1 / 2 * (R2 - L2) - 3: Print "ÕÕÕÕÕÕ": SEE = 1: LASTP1 = P1: GoSub 5020: SEE = 0: P1 = 0: Return
+3230 P1 = PP(PLAYER_MAP(TRADING_PLAYER_A), CPP): If P1 = LASTP1 Then LASTP1 = 0: GoSub 7020: Return Else SEE1 = SEE1 + 1: Color COLOR_ZZ, 0: Locate Action_Window_Top, Action_Window_Left + 1 / 2 * (Action_Window_Right - Action_Window_Left) - 3: Print "ÕÕÕÕÕÕ": SEE = 1: LASTP1 = P1: GoSub 5020: SEE = 0: P1 = 0: Return
 3240 Rem  * add houses *
 3250 CU(P) = CU(P) + 1: If CU(P) = 5 Then CT = CT + 1: CE = CE - 4 Else CE = CE + 1
 3260 If CU(P) > PROPERTY_HOUSES(P) Then WV = -50 * PROPERTY_BOARD_NUM(P) Else WV = -25 * PROPERTY_BOARD_NUM(P)
@@ -547,10 +554,10 @@ Return
 3460 If PM(P) = 1 Then WV = PROPERTY_COST(P) * .55: PM(P) = 0: CM(P) = 1 Else If PM(P) = 2 Then WV = .05 * PROPERTY_COST(P): PM(P) = 0 Else GoTo 3480
 3470 CW(PLAYER_MAP(TRADING_PLAYER_B)) = CW(PLAYER_MAP(TRADING_PLAYER_B)) + WV: GoTo 3480
 3480 DDN = DDN - 1: GoTo 3540
-3490 If CM(P) Then GoSub 3570: X1 = L2 + 16: Y1 = B1 + 1: COLOR_CC = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): X1 = L2: Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Locate B1 + 1, X1 - 1: Print "[         |     |          |     |  ]": If PM(P) Then 3500 Else CO(P) = PLAYER_MAP(TRADING_PLAYER_A): GoTo 3560 Else GoTo 3500
+3490 If CM(P) Then GoSub 3570: X1 = Action_Window_Left + 16: Y1 = Board_Bottom + 1: COLOR_CC = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): X1 = Action_Window_Left: Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Locate Board_Bottom + 1, X1 - 1: Print "[         |     |          |     |  ]": If PM(P) Then 3500 Else CO(P) = PLAYER_MAP(TRADING_PLAYER_A): GoTo 3560 Else GoTo 3500
 3500 DDN = DDN + 1: GoTo 3540
 3510 RRV = TRADING_PLAYER_B: If CM(P) <> 0 And PM(P) = 0 Then GoSub 3570 Else GoTo 3530
-3520 X1 = L2 + 16: Y1 = B1 + 1: X1 = L2: Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Locate B1 + 1, X1 - 1: Print "[         |     |          |     |  ]": If PM = 0 Then 3560
+3520 X1 = Action_Window_Left + 16: Y1 = Board_Bottom + 1: X1 = Action_Window_Left: Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Locate Board_Bottom + 1, X1 - 1: Print "[         |     |          |     |  ]": If PM = 0 Then 3560
 3530 If CW(PLAYER_MAP(TRADING_PLAYER_B)) - Val(Right$(Str$(CI(P)), 3) + KEY_PRESSED$) + Val(CI$) < 0 Then 3560 Else If Val(CI$) = 0 And CO(P) = PLAYER_MAP(TRADING_PLAYER_A) Then DDN = DDN + 1
 3531 CO(P) = PLAYER_MAP(TRADING_PLAYER_B)
 3540 CI$ = Str$(CI(P)): LC = Val(CI$): LCPP = CPP: CI$ = Right$(CI$, 3) + KEY_PRESSED$: CI(P) = Val(CI$)
@@ -571,31 +578,31 @@ Return
 
 3630 Rem  * move *
 3640 LC = CI(P)
-3650 LV = V: If CPP = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Then If PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) <= W# Then V = BV(TRADING_PLAYER_A): CPP = 0: GoTo 3730 Else CPP = 0 Else CPP = CPP + 1
-3660 If V < BV(TRADING_PLAYER_A) + W# - 1 Then V = V + 1: GoTo 3730 Else TP(PLAYER_MAP(TRADING_PLAYER_A)) = TP(PLAYER_MAP(TRADING_PLAYER_A)) + 1: If TP(PLAYER_MAP(TRADING_PLAYER_A)) > PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Then TP(PLAYER_MAP(TRADING_PLAYER_A)) = 0
+3650 LV = V: If CPP = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Then If PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) <= Player_Column_Inner_Height Then V = Player_Properties_Top(TRADING_PLAYER_A): CPP = 0: GoTo 3730 Else CPP = 0 Else CPP = CPP + 1
+3660 If V < Player_Properties_Top(TRADING_PLAYER_A) + Player_Column_Inner_Height - 1 Then V = V + 1: GoTo 3730 Else TP(PLAYER_MAP(TRADING_PLAYER_A)) = TP(PLAYER_MAP(TRADING_PLAYER_A)) + 1: If TP(PLAYER_MAP(TRADING_PLAYER_A)) > PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Then TP(PLAYER_MAP(TRADING_PLAYER_A)) = 0
 3670 L = TRADING_PLAYER_A: GoSub 1750: V = V - 1: GoTo 3750
 3680 '
 3690 LC = CI(P)
-3700 LV = V: If CPP = 0 Then If PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) <= W# Then CPP = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1: V = BV(TRADING_PLAYER_A) + PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1: GoTo 3730 Else CPP = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Else CPP = CPP - 1
-3710 If V > BV(TRADING_PLAYER_A) Then V = V - 1: GoTo 3730 Else If TP(PLAYER_MAP(TRADING_PLAYER_A)) = 0 Then TP(PLAYER_MAP(TRADING_PLAYER_A)) = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Else TP(PLAYER_MAP(TRADING_PLAYER_A)) = TP(PLAYER_MAP(TRADING_PLAYER_A)) - 1
-3720 L = TRADING_PLAYER_A: GoSub 1750: V = BV(TRADING_PLAYER_A): GoTo 3750
+3700 LV = V: If CPP = 0 Then If PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) <= Player_Column_Inner_Height Then CPP = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1: V = Player_Properties_Top(TRADING_PLAYER_A) + PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1: GoTo 3730 Else CPP = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Else CPP = CPP - 1
+3710 If V > Player_Properties_Top(TRADING_PLAYER_A) Then V = V - 1: GoTo 3730 Else If TP(PLAYER_MAP(TRADING_PLAYER_A)) = 0 Then TP(PLAYER_MAP(TRADING_PLAYER_A)) = PLAYER_P(PLAYER_MAP(TRADING_PLAYER_A)) - 1 Else TP(PLAYER_MAP(TRADING_PLAYER_A)) = TP(PLAYER_MAP(TRADING_PLAYER_A)) - 1
+3720 L = TRADING_PLAYER_A: GoSub 1750: V = Player_Properties_Top(TRADING_PLAYER_A): GoTo 3750
 3730 If CO(PP(PLAYER_MAP(TRADING_PLAYER_A), LCPP)) <> PLAYER_MAP(TRADING_PLAYER_A) Then Color PLAYER_COLOR(CO(PP(PLAYER_MAP(TRADING_PLAYER_A), LCPP))), 0 Else Color COLOR_ZZ - CM(PP(PLAYER_MAP(TRADING_PLAYER_A), LCPP)), 0
-3740 Locate LV, BH(TRADING_PLAYER_A) + 1: Print PROPERTY_SHORT_NAMES$(PP(PLAYER_MAP(TRADING_PLAYER_A), LCPP));
+3740 Locate LV, Player_Properties_Left(TRADING_PLAYER_A) + 1: Print PROPERTY_SHORT_NAMES$(PP(PLAYER_MAP(TRADING_PLAYER_A), LCPP));
 3750 P = PP(PLAYER_MAP(TRADING_PLAYER_A), CPP): CI$ = Str$(CI(P)): GoSub 2460: GoSub 2451: GoTo 2620
 3760 Rem         * menu *
-3770 PC = PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)): Locate B1 + 1, X1: If A = 1 Then Color 14, 1: Print "MORTGAGE";: GoTo 3790 Else If DM Then Color PC, 0 Else Color COLOR_ZZ, 0
+3770 PC = PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)): Locate Board_Bottom + 1, X1: If A = 1 Then Color 14, 1: Print "MORTGAGE";: GoTo 3790 Else If DM Then Color PC, 0 Else Color COLOR_ZZ, 0
 3780 Print "mortgage";
 3790 If DH Then Color PC, 0 Else Color COLOR_ZZ, 0
-3800 Locate B1 + 1, X1 + 12: Print "";
+3800 Locate Board_Bottom + 1, X1 + 12: Print "";
 3810 If A = 2 Then Color 14, 1 Else If DH1 Then Color PC, 0 Else Color COLOR_ZZ, 0
-3820 Locate B1 + 1, X1 + 11: Print "+";
+3820 Locate Board_Bottom + 1, X1 + 11: Print "+";
 3830 If A = 3 Then Color 14, 1 Else If DH2 Then Color PC, 0 Else Color COLOR_ZZ, 0
-3840 Locate B1 + 1, X1 + 13: Print "-";
-3850 Locate B1 + 1, X1 + 17: If A = 4 Then Color 14, 1: Print Using "TRADE(#)"; TRADING_PLAYER_B;: GoTo 3870 Else If DD Then Color PC, 0 Else Color COLOR_ZZ, 0
+3840 Locate Board_Bottom + 1, X1 + 13: Print "-";
+3850 Locate Board_Bottom + 1, X1 + 17: If A = 4 Then Color 14, 1: Print Using "TRADE(#)"; TRADING_PLAYER_B;: GoTo 3870 Else If DD Then Color PC, 0 Else Color COLOR_ZZ, 0
 3860 Print Using "trade(#)"; TRADING_PLAYER_B;
-3870 Locate B1 + 1, X1 + 28: If A = 5 Then Color 14, 1: Print "SEE"; Else Color PC, 0: Print "see";
+3870 Locate Board_Bottom + 1, X1 + 28: If A = 5 Then Color 14, 1: Print "SEE"; Else Color PC, 0: Print "see";
 3880 If A = 6 Then Color 14, 1 Else Color PC, 0
-3890 Locate B1 + 1, X1 + 34: Print "˚";
+3890 Locate Board_Bottom + 1, X1 + 34: Print "˚";
 3900 Return
 
 3910 Rem
@@ -616,16 +623,16 @@ GoTo 7350
 4000 Rem
 4010 Rem @@@@ SEE A PROPERTY CARD @@@@
 4020 Rem
-4030 Poke 1050, Peek(1052): P = 1: X1 = L2 + 16
-4040 LASTP1 = 0: L = PLAYER_PL: X1 = L2
-4050 Locate B1 + 1, X1 + 1
+4030 Poke 1050, Peek(1052): P = 1: X1 = Action_Window_Left + 16
+4040 LASTP1 = 0: L = PLAYER_PL: X1 = Action_Window_Left
+4050 Locate Board_Bottom + 1, X1 + 1
 4060 If PROPERTY_TYPE(P) > 2 Then 4090 Else Color 7, 0: If P <> 28 And P <> 12 Then 4080
 4070 Print "€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€": GoTo 4100
 4080 Print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX": GoTo 4100
 4090 Color PROPERTY_FOREGROUND_COLOR(P), PROPERTY_BACKGROUND_COLOR(P): Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
 4100 Color COLOR_ZZ, 0
-4110 SP = 1 / 2 * ((R2 - L2) - Len(PROPERTY_NAMES$(P)))
-4120 Locate B1 + 1, X1 + SP - 1
+4110 SP = 1 / 2 * ((Action_Window_Right - Action_Window_Left) - Len(PROPERTY_NAMES$(P)))
+4120 Locate Board_Bottom + 1, X1 + SP - 1
 4130 Print " "; PROPERTY_NAMES$(P); " "
 4140 KEY_PRESSED$ = InKey$
 4150 If KEY_PRESSED$ = Chr$(13) Then If P = LASTP1 Then LASTP1 = 0: GoSub 7020: GoTo 4140 Else GoTo 4290
@@ -642,7 +649,7 @@ GoTo 7350
 4260 GoSub 7060
 4270 If PLAYER_OWES_MONEY_STATUS = 0 Then 3910
 4280 SEE = 1: P1 = CURRENT_PROPERTY_NUM: GoSub 5020: GoTo 3910
-4290 LASTP1 = P: P1 = P: SEE = 1: Locate T2, L2 + 1 / 2 * (R2 - L2) - 3: Print "ÕÕÕÕÕÕ": GoSub 5020: GoTo 4140
+4290 LASTP1 = P: P1 = P: SEE = 1: Locate Action_Window_Top, Action_Window_Left + 1 / 2 * (Action_Window_Right - Action_Window_Left) - 3: Print "ÕÕÕÕÕÕ": GoSub 5020: GoTo 4140
 
 4300 Rem
 4310 Rem @@@@ ROLL DICE @@@@
@@ -660,7 +667,7 @@ If HIDDEN_INPUT_KEYS_TO_ACCEPT = 1 Then DIE1_ROLLED = INK: GoSub 11200: DIE2_ROL
 4380 Rem
 4390 For D = 1 To DIE1_ROLLED
     If SOUNDS Then Play "mf O4 A64 P64"
-    Locate B1 + 1, L2 + 9
+    Locate Board_Bottom + 1, Action_Window_Left + 9
     Color PLAYER_COLOR(PLAYER_MAP(CL)), 0
     Print Using "[#]"; D
     _Delay 0.05
@@ -668,7 +675,7 @@ Next D
 If SOUNDS Then Play "P16"
 4420 For D = 1 To DIE2_ROLLED
     If SOUNDS Then Play "O4 A64 P64"
-    Locate B1 + 1, L2 + 21
+    Locate Board_Bottom + 1, Action_Window_Left + 21
     Color PLAYER_COLOR(PLAYER_MAP(CL)), 0
     Print Using "[#]"; D
     _Delay 0.05
@@ -681,7 +688,7 @@ _Delay 0.1
 4470 If DIE1_ROLLED <> DIE2_ROLLED Then 
     Goto 4540
 End If
-4480 Locate B1 + 1, L2 + 13: Color 30, 1: Print "Doubles"
+4480 Locate Board_Bottom + 1, Action_Window_Left + 13: Color 30, 1: Print "Doubles"
 4490 If SOUNDS Then 
     REM TODO fix the following which results in an Illegal function call
     REM Play "Mf O3 A64 P64 A64 P64 A64 P32 X" + VarPtr$(PLY$)
@@ -692,15 +699,15 @@ End If
         Play "<A"
     End If
 End if
-4500 GoSub 10310: Locate B1 + 1, L2 + 13: Color , 0: Print "       "
-4510 If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) Then Locate Y, X: Color , 0: Print " ": PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0: Y = T1 + 4: PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y: BACK_TO_BACK_DOUBLES_COUNT = 0: GoTo 4590
+4500 GoSub 10310: Locate Board_Bottom + 1, Action_Window_Left + 13: Color , 0: Print "       "
+4510 If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) Then Locate Y, X: Color , 0: Print " ": PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0: Y = Board_Top + 4: PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y: BACK_TO_BACK_DOUBLES_COUNT = 0: GoTo 4590
 4520 BACK_TO_BACK_DOUBLES_COUNT = BACK_TO_BACK_DOUBLES_COUNT + 1: If BACK_TO_BACK_DOUBLES_COUNT < 3 Then GoSub 11530: GoTo 4590 Else Locate Y, X: Color , 0: Print " ": BACK_TO_BACK_DOUBLES_COUNT = 0: PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 1
-4530 CURRENT_PROPERTY_NUM = 10: PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL)) = CURRENT_PROPERTY_NUM: Y = T1 + 1: PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y: NX = R1 - KK + CL: PLAYER_LOCATION_X(1, PLAYER_MAP(CL)) = NX: L = CL: GoSub 7330: GoSub 7240: CA = CL: GoSub 8510: GoTo 7070
-4540 BACK_TO_BACK_DOUBLES_COUNT = 0: GoSub 11530: If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then 4590 Else PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) + 1: Color 30, 1: Locate B1 + 1, L2 + 14
+4530 CURRENT_PROPERTY_NUM = 10: PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL)) = CURRENT_PROPERTY_NUM: Y = Board_Top + 1: PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y: NX = Board_Right - KK + CL: PLAYER_LOCATION_X(1, PLAYER_MAP(CL)) = NX: L = CL: GoSub 7330: GoSub 7240: CA = CL: GoSub 8510: GoTo 7070
+4540 BACK_TO_BACK_DOUBLES_COUNT = 0: GoSub 11530: If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then 4590 Else PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) + 1: Color 30, 1: Locate Board_Bottom + 1, Action_Window_Left + 14
 4550 Print Using "Day #"; PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) - 1: GoSub 10310: GoSub 7330: If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) < 4 Then 7150 Else Color , 0
-4560 Locate B1 + 1, L2 + 9: Print "               ": NOROLL = 1: GoTo 2150
+4560 Locate Board_Bottom + 1, Action_Window_Left + 9: Print "               ": NOROLL = 1: GoTo 2150
 4570 Locate PLAYER_LOCATION_Y(PLAYER_MAP(CL)), PLAYER_LOCATION_X(1, PLAYER_MAP(CL)): Print " "
-4580 Locate B1 + 1, L2 + 9: Print Using "[#]         [#]"; DIE1_ROLLED; DIE2_ROLLED: PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0: Y = T1 + 4
+4580 Locate Board_Bottom + 1, Action_Window_Left + 9: Print Using "[#]         [#]"; DIE1_ROLLED; DIE2_ROLLED: PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0: Y = Board_Top + 4
 
 4590 Rem
 4600 Rem @@@@ CALCULATE PROPERTY TO LAND ON @@@@
@@ -715,27 +722,27 @@ For A = 1 To DICE_ROLLED
 4650 Rem @@@@ MOVE PLAYER @@@@
 4660 Rem
 4670 NX = X
-X = (B(PROPERTY_BOARD_NUM(CURRENT_PROPERTY_NUM), 10) - CURRENT_PROPERTY_NUM - 1) * 6 + 13 + L1
-If PROPERTY_TYPE(CURRENT_PROPERTY_NUM) = 0 Then X = L1 + KK
-4680 If CB Then Y = T1 + 4: CB = 0
+X = (B(PROPERTY_BOARD_NUM(CURRENT_PROPERTY_NUM), 10) - CURRENT_PROPERTY_NUM - 1) * 6 + 13 + Board_Left
+If PROPERTY_TYPE(CURRENT_PROPERTY_NUM) = 0 Then X = Board_Left + KK
+4680 If CB Then Y = Board_Top + 4: CB = 0
 4690 LX = NX
-If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
+If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = Board_Top + 4
 4700 NX = NX - 1 + 2 * BW_FLAG
-4710 If BW_FLAG = PO And NX = L1 + KK Then PLAYER1_DUE = 200: PLAYER_PL1 = PLAYER_PL: TRANSACTION_PLAYER_A = PLAYER_PL: GoSub 6590
+4710 If BW_FLAG = PO And NX = Board_Left + KK Then PLAYER1_DUE = 200: PLAYER_PL1 = PLAYER_PL: TRANSACTION_PLAYER_A = PLAYER_PL: GoSub 6590
 4720 If NX = X And PO = CURRENT_PROPERTY_NUM Then AR = 1
 4730 If Screen(Y, NX) = 179 Then PO = PO + 1 - 2 * BW_FLAG Else GoTo 4760
 4740 If BW_FLAG Then If PO <= 0 Then PO = 40 Else GoTo 4750 Else If PO >= 40 Then PO = 0
-4750 If MVE_FLAG Then MVE_FLAG = 0: AR = 1: If LP = CURRENT_PROPERTY_NUM Then NX = LX: GoTo 4770 Else NX = X: NY = T1 + 2: GoTo 4770 Else GoTo 4700
+4750 If MVE_FLAG Then MVE_FLAG = 0: AR = 1: If LP = CURRENT_PROPERTY_NUM Then NX = LX: GoTo 4770 Else NX = X: NY = Board_Top + 2: GoTo 4770 Else GoTo 4700
 4760 If Screen(NY, NX) = 32 Then 4770 Else If PO = CURRENT_PROPERTY_NUM Then MVE_FLAG = 1: GoTo 4700 Else GoTo 4700
 4770 Locate Y, LX: Color PLAYER_COLOR(PLAYER_MAP(CL)), 0: Print " ";: Locate NY, NX: Print Chr$(L(PLAYER_MAP(CL)))
 4780 Y = NY: If AR Then AR = 0: BW_FLAG = 0: MVE_FLAG = 0: GoTo 4820 Else LP = PO
-4790 If (BW_FLAG Or NX > L1 + KK) And (BW_FLAG = 0 Or NX < R1 - KK) Then 4810
-4800 CB = 1: Locate Y, NX: Color , 0: Print " ";: If BW_FLAG Then NX = L1 + KK: GoTo 960 Else NX = R1 - 2: GoTo 960
+4790 If (BW_FLAG Or NX > Board_Left + KK) And (BW_FLAG = 0 Or NX < Board_Right - KK) Then 4810
+4800 CB = 1: Locate Y, NX: Color , 0: Print " ";: If BW_FLAG Then NX = Board_Left + KK: GoTo 960 Else NX = Board_Right - 2: GoTo 960
 4810 GoTo 4680
 4820 If PROPERTY_TYPE(CURRENT_PROPERTY_NUM) > 0 Then 4850
-4830 PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y: If NX < L1 + 10 Then Color PLAYER_COLOR(PLAYER_MAP(CL)), 0: Locate PLAYER_LOCATION_Y(PLAYER_MAP(CL)), PLAYER_LOCATION_X(2, PLAYER_MAP(CL)): Print Chr$(L(PLAYER_MAP(CL))): Locate PLAYER_LOCATION_Y(PLAYER_MAP(CL)), NX: Print " "
-4840 NX = R1 - KK + PLAYER_MAP(CL)
-4850 Color , 0: Locate B1 + 1, L2: Print "                                   ": PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL)) = CURRENT_PROPERTY_NUM: L = CL: GoSub 7240: P1 = CURRENT_PROPERTY_NUM: X = NX: PLAYER_LOCATION_X(1, PLAYER_MAP(CL)) = NX
+4830 PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y: If NX < Board_Left + 10 Then Color PLAYER_COLOR(PLAYER_MAP(CL)), 0: Locate PLAYER_LOCATION_Y(PLAYER_MAP(CL)), PLAYER_LOCATION_X(2, PLAYER_MAP(CL)): Print Chr$(L(PLAYER_MAP(CL))): Locate PLAYER_LOCATION_Y(PLAYER_MAP(CL)), NX: Print " "
+4840 NX = Board_Right - KK + PLAYER_MAP(CL)
+4850 Color , 0: Locate Board_Bottom + 1, Action_Window_Left: Print "                                   ": PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL)) = CURRENT_PROPERTY_NUM: L = CL: GoSub 7240: P1 = CURRENT_PROPERTY_NUM: X = NX: PLAYER_LOCATION_X(1, PLAYER_MAP(CL)) = NX
 4860 Rem
 4870 Rem @@@@ DEFINE CURRENT PROPERTY @@@@
 4880 Rem
@@ -757,31 +764,31 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5030 Rem @@@@ SHOW PROPERTY INFORMATION @@@@
 5040 Rem
 5050 If RL <> 0 Then On PROPERTY_TYPE(P1) - 1 GOTO 5320, 5090
-5060 Color COLOR_ZZ, 0: Locate T2, L2 + 10: Print String$(15, Chr$(205))
-5070 SP = 1 / 2 * ((R2 - L2) - Len(PROPERTY_NAMES$(P1)))
+5060 Color COLOR_ZZ, 0: Locate Action_Window_Top, Action_Window_Left + 10: Print String$(15, Chr$(205))
+5070 SP = 1 / 2 * ((Action_Window_Right - Action_Window_Left) - Len(PROPERTY_NAMES$(P1)))
 5080 If PROPERTY_TYPE(P1) = 2 Then 5320
 5090 If RL > 0 Then Color 30, 1 Else Color COLOR_ZZ, 0
 5100 If RL Then On Abs(RL) GOTO 5110, 5200, 5210, 5220, 5230, 5240, 5250
-5110 Locate T2, L2 + 1 / 2 * (R2 - L2) - 3
+5110 Locate Action_Window_Top, Action_Window_Left + 1 / 2 * (Action_Window_Right - Action_Window_Left) - 3
 5120 If PROPERTY_COST(P1) > 99 Then Print Using "[$###.]"; PROPERTY_COST(P1) Else Print Using "[$##.]"; PROPERTY_COST(P1)
 5130 If RL Then 5310 Else BC = PROPERTY_BACKGROUND_COLOR(P1): FC = PROPERTY_FOREGROUND_COLOR(P1)
 5140 If PROPERTY_TYPE(P1) = 2 Then 5320 Else If RL Then 5090 Else BC = PROPERTY_BACKGROUND_COLOR(P1): FC = PROPERTY_FOREGROUND_COLOR(P1)
 5150 Color FC, BC
-5160 Locate T2 + 1, L2 + 1: Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
-5170 Locate , L2 + 1: Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
-5180 Locate , L2 + 1: Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
-5190 Color COLOR_ZZ, 0: SP = 1 / 2 * ((R2 - L2) - Len(PROPERTY_NAMES$(P1))): Locate T2 + 2, L2 + SP - 1: Print " "; PROPERTY_NAMES$(P1); " ": Locate T2 + 4, L2 + 1: Print "                                "
-5200 Locate T2 + 5, L2 + 1: Print Using "            Rent  $$##.         "; RENT_RATES(0, P1): If RL Then 5310
-5210 Locate T2 + 6, L2 + 1: Print Using " With 1 House              $###."; RENT_RATES(1, P1): If RL Then 5310
-5220 Locate T2 + 7, L2 + 1: Print Using " With 2 Houses              ###."; RENT_RATES(2, P1): If RL Then 5310
-5230 Locate T2 + 8, L2 + 1: Print Using " With 3 Houses             ####."; RENT_RATES(3, P1): If RL Then 5310
-5240 Locate T2 + 9, L2 + 1: Print Using " With 4 Houses             ####."; RENT_RATES(4, P1): If RL Then 5310
-5250 Locate T2 + 10, L2 + 1: Print Using "      With HOTEL $$####.        "; RENT_RATES(5, P1): If RL Then 5310
-5260 Locate T2 + 11, L2 + 1: Print "                               "
-5270 Locate T2 + 12, L2 + 1: Print Using "     Mortgage Value $$###.      "; 1 / 2 * PROPERTY_COST(P1)
-5280 Locate T2 + 13, L2 + 1: Print Using "     Houses cost $$###. each    "; 50 * PROPERTY_BOARD_NUM(P1)
-5290 Locate T2 + 14, L2 + 1: Print Using "   Hotels, $$###. plus 4 houses "; 50 * PROPERTY_BOARD_NUM(P1)
-5300 Locate T2 + 15, L2 + 1: Print "                                ";
+5160 Locate Action_Window_Top + 1, Action_Window_Left + 1: Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
+5170 Locate , Action_Window_Left + 1: Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
+5180 Locate , Action_Window_Left + 1: Print "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"
+5190 Color COLOR_ZZ, 0: SP = 1 / 2 * ((Action_Window_Right - Action_Window_Left) - Len(PROPERTY_NAMES$(P1))): Locate Action_Window_Top + 2, Action_Window_Left + SP - 1: Print " "; PROPERTY_NAMES$(P1); " ": Locate Action_Window_Top + 4, Action_Window_Left + 1: Print "                                "
+5200 Locate Action_Window_Top + 5, Action_Window_Left + 1: Print Using "            Rent  $$##.         "; RENT_RATES(0, P1): If RL Then 5310
+5210 Locate Action_Window_Top + 6, Action_Window_Left + 1: Print Using " With 1 House              $###."; RENT_RATES(1, P1): If RL Then 5310
+5220 Locate Action_Window_Top + 7, Action_Window_Left + 1: Print Using " With 2 Houses              ###."; RENT_RATES(2, P1): If RL Then 5310
+5230 Locate Action_Window_Top + 8, Action_Window_Left + 1: Print Using " With 3 Houses             ####."; RENT_RATES(3, P1): If RL Then 5310
+5240 Locate Action_Window_Top + 9, Action_Window_Left + 1: Print Using " With 4 Houses             ####."; RENT_RATES(4, P1): If RL Then 5310
+5250 Locate Action_Window_Top + 10, Action_Window_Left + 1: Print Using "      With HOTEL $$####.        "; RENT_RATES(5, P1): If RL Then 5310
+5260 Locate Action_Window_Top + 11, Action_Window_Left + 1: Print "                               "
+5270 Locate Action_Window_Top + 12, Action_Window_Left + 1: Print Using "     Mortgage Value $$###.      "; 1 / 2 * PROPERTY_COST(P1)
+5280 Locate Action_Window_Top + 13, Action_Window_Left + 1: Print Using "     Houses cost $$###. each    "; 50 * PROPERTY_BOARD_NUM(P1)
+5290 Locate Action_Window_Top + 14, Action_Window_Left + 1: Print Using "   Hotels, $$###. plus 4 houses "; 50 * PROPERTY_BOARD_NUM(P1)
+5300 Locate Action_Window_Top + 15, Action_Window_Left + 1: Print "                                ";
 5310 If RL > 0 Then RL = -RL: GoSub 10310: GoTo 5090 Else RL = 0: _Delay 0.1:Return
 
 5320 Rem
@@ -790,23 +797,23 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5350 If B(PROPERTY_BOARD_NUM(P1), 5) <> P1 Then 5590
 5360 If RL > 0 Then Color 30, 1 Else Color COLOR_ZZ, 0
 5370 If RL Then On Abs(RL) GOTO 5380, 5470, 5480, 5490, 5500
-5380 Locate T2, L2 + 1 / 2 * (R2 - L2) - 3: Print Using "[$###.]"; PROPERTY_COST(P1): If RL Then 5550
-5390 Color COLOR_ZZ, 0: SP = 1 / 2 * ((R2 - L2) - Len(PROPERTY_NAMES$(P1)))
-5400 Locate T2 + 1, L2 + 1: Print "                                "
-5410 Locate T2 + 2, L2 + 1: Print "              è‹€               "
-5420 Locate T2 + 3, L2 + 1: Print "              ¯ ¯               "
-5430 Locate T2 + 4, L2 + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
-5440 Locate T2 + 5, L2 + 1: Print Space$(SP - 1)+PROPERTY_NAMES$(P1)+Space$(R2 - (L2 + SP + Len(PROPERTY_NAMES$(P1))) - 1)
-5450 Locate T2 + 6, L2 + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
-5460 Locate T2 + 7, L2 + 1: Print "                                "
-5470 Locate T2 + 8, L2 + 1: Print " Rent                      $25. ": If RL Then 5550
-5480 Locate T2 + 9, L2 + 1: Print " If 2 R.R's are owned       50. ": If RL Then 5550
-5490 Locate T2 + 10, L2 + 1: Print " If 3  "; Chr$(34); "     "; Chr$(34); "   "; Chr$(34); "         100. ": If RL Then 5550
-5500 Locate T2 + 11, L2 + 1: Print " If 4  "; Chr$(34); "     "; Chr$(34); "   "; Chr$(34); "         200. ": If RL Then 5550
-5510 Locate T2 + 12, L2 + 1: Print "                                "
-5520 Locate T2 + 13, L2 + 1: Print "                                "
-5530 Locate T2 + 14, L2 + 1: Print " Mortgage Value           $100. "
-5540 Locate T2 + 15, L2 + 1: Print "                                ";
+5380 Locate Action_Window_Top, Action_Window_Left + 1 / 2 * (Action_Window_Right - Action_Window_Left) - 3: Print Using "[$###.]"; PROPERTY_COST(P1): If RL Then 5550
+5390 Color COLOR_ZZ, 0: SP = 1 / 2 * ((Action_Window_Right - Action_Window_Left) - Len(PROPERTY_NAMES$(P1)))
+5400 Locate Action_Window_Top + 1, Action_Window_Left + 1: Print "                                "
+5410 Locate Action_Window_Top + 2, Action_Window_Left + 1: Print "              è‹€               "
+5420 Locate Action_Window_Top + 3, Action_Window_Left + 1: Print "              ¯ ¯               "
+5430 Locate Action_Window_Top + 4, Action_Window_Left + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
+5440 Locate Action_Window_Top + 5, Action_Window_Left + 1: Print Space$(SP - 1)+PROPERTY_NAMES$(P1)+Space$(Action_Window_Right - (Action_Window_Left + SP + Len(PROPERTY_NAMES$(P1))) - 1)
+5450 Locate Action_Window_Top + 6, Action_Window_Left + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
+5460 Locate Action_Window_Top + 7, Action_Window_Left + 1: Print "                                "
+5470 Locate Action_Window_Top + 8, Action_Window_Left + 1: Print " Rent                      $25. ": If RL Then 5550
+5480 Locate Action_Window_Top + 9, Action_Window_Left + 1: Print " If 2 R.R's are owned       50. ": If RL Then 5550
+5490 Locate Action_Window_Top + 10, Action_Window_Left + 1: Print " If 3  "; Chr$(34); "     "; Chr$(34); "   "; Chr$(34); "         100. ": If RL Then 5550
+5500 Locate Action_Window_Top + 11, Action_Window_Left + 1: Print " If 4  "; Chr$(34); "     "; Chr$(34); "   "; Chr$(34); "         200. ": If RL Then 5550
+5510 Locate Action_Window_Top + 12, Action_Window_Left + 1: Print "                                "
+5520 Locate Action_Window_Top + 13, Action_Window_Left + 1: Print "                                "
+5530 Locate Action_Window_Top + 14, Action_Window_Left + 1: Print " Mortgage Value           $100. "
+5540 Locate Action_Window_Top + 15, Action_Window_Left + 1: Print "                                ";
 5550 If RL > 0 Then RL = -RL: GoSub 10310: GoTo 5360 Else RL = 0: Return
 
 5560 Rem
@@ -815,23 +822,23 @@ If PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 0 Then NY = T1 + 4
 5590 If P1 <> 12 And P1 <> 28 Then Return
 5600 If RL > 0 Then Color 30, 1 Else Color COLOR_ZZ, 0
 5610 If RL Then On Abs(RL) GOTO 5620, 5710, 5740
-5620 Locate T2, L2 + 1 / 2 * (R2 - L2) - 3: Print Using "[$###.]"; PROPERTY_COST(P1): If RL Then 5790
+5620 Locate Action_Window_Top, Action_Window_Left + 1 / 2 * (Action_Window_Right - Action_Window_Left) - 3: Print Using "[$###.]"; PROPERTY_COST(P1): If RL Then 5790
 5630 Color PROPERTY_FOREGROUND_COLOR(P1), 0
-5640 Locate T2 + 1, L2 + 1: Print Space$(R2 - L2 - 1): Locate T2 + 2, L2 + 1: Print "              "; PROPERTY_SHORT_NAMES$(P1); Space$(15);
+5640 Locate Action_Window_Top + 1, Action_Window_Left + 1: Print Space$(Action_Window_Right - Action_Window_Left - 1): Locate Action_Window_Top + 2, Action_Window_Left + 1: Print "              "; PROPERTY_SHORT_NAMES$(P1); Space$(15);
 5650 Color COLOR_ZZ, 0
-5660 Locate T2 + 3, L2 + 1: Print "                                "
-5670 Locate T2 + 4, L2 + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
-5680 Locate T2 + 5, L2 + 1: Print Space$(SP - 1)+PROPERTY_NAMES$(P1)+Space$(R2 - (L2 + SP + Len(PROPERTY_NAMES$(P1))) - 1)
-5690 Locate T2 + 6, L2 + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
-5700 Locate T2 + 7, L2 + 1: Print "                                "
-5710 Locate T2 + 8, L2 + 1: Print "   If  one  "; Chr$(34); "Utility"; Chr$(34); "  is  owned"
-5720 Locate T2 + 9, L2 + 1: Print "rent is 4 times the amount shown"
-5730 Locate T2 + 10, L2 + 1: Print "on dice.                        ": If RL Then 5790
-5740 Locate T2 + 11, L2 + 1: Print "  If   both   "; Chr$(34); "Utilities"; Chr$(34); "   are"
-5750 Locate T2 + 12, L2 + 1: Print " owned  rent  is    10    times"
-5760 Locate T2 + 13, L2 + 1: Print " amount   shown    on     dice.": If RL Then 5790
-5770 Locate T2 + 14, L2 + 1: Print "                                "
-5780 Locate T2 + 15, L2 + 1: Print "Mortgage Value              $75.";
+5660 Locate Action_Window_Top + 3, Action_Window_Left + 1: Print "                                "
+5670 Locate Action_Window_Top + 4, Action_Window_Left + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
+5680 Locate Action_Window_Top + 5, Action_Window_Left + 1: Print Space$(SP - 1)+PROPERTY_NAMES$(P1)+Space$(Action_Window_Right - (Action_Window_Left + SP + Len(PROPERTY_NAMES$(P1))) - 1)
+5690 Locate Action_Window_Top + 6, Action_Window_Left + 1: Print " ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒ "
+5700 Locate Action_Window_Top + 7, Action_Window_Left + 1: Print "                                "
+5710 Locate Action_Window_Top + 8, Action_Window_Left + 1: Print "   If  one  "; Chr$(34); "Utility"; Chr$(34); "  is  owned"
+5720 Locate Action_Window_Top + 9, Action_Window_Left + 1: Print "rent is 4 times the amount shown"
+5730 Locate Action_Window_Top + 10, Action_Window_Left + 1: Print "on dice.                        ": If RL Then 5790
+5740 Locate Action_Window_Top + 11, Action_Window_Left + 1: Print "  If   both   "; Chr$(34); "Utilities"; Chr$(34); "   are"
+5750 Locate Action_Window_Top + 12, Action_Window_Left + 1: Print " owned  rent  is    10    times"
+5760 Locate Action_Window_Top + 13, Action_Window_Left + 1: Print " amount   shown    on     dice.": If RL Then 5790
+5770 Locate Action_Window_Top + 14, Action_Window_Left + 1: Print "                                "
+5780 Locate Action_Window_Top + 15, Action_Window_Left + 1: Print "Mortgage Value              $75.";
 5790 If RL > 0 Then RL = -RL: GoSub 10310: GoTo 5600 Else RL = 0: Return
 
 5800 Rem
@@ -850,9 +857,9 @@ GoTo 7070
 5870 Rem
 5880 Rem * BLINK PROPERTY *
 5890 Rem
-5900 H(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) = BH(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)))
-5910 V = BV(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) + PPN(CURRENT_PROPERTY_NUM) - 1 - TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) + PLAYER_P(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) * (1 + (PPN(CURRENT_PROPERTY_NUM) >= TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))))
-5920 If V >= BV(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) And V <= BV(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) + W# - 1 Then 5970
+5900 H(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) = Player_Properties_Left(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)))
+5910 V = Player_Properties_Top(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) + PPN(CURRENT_PROPERTY_NUM) - 1 - TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) + PLAYER_P(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) * (1 + (PPN(CURRENT_PROPERTY_NUM) >= TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))))
+5920 If V >= Player_Properties_Top(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) And V <= Player_Properties_Top(PLAYER_UNMAP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM))) + Player_Column_Inner_Height - 1 Then 5970
 5930 If PROPERTY_OWNER(CURRENT_PROPERTY_NUM) = PROPERTY_OWNER(G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 1)) Then TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = PPN(G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 1)) - 1: RTP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 1): GoTo 5960
 5940 If PROPERTY_OWNER(CURRENT_PROPERTY_NUM) = PROPERTY_OWNER(G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 2)) Then TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = PPN(G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 2)) - 1: RTP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 2): GoTo 5960
 5950 If PROPERTY_OWNER(CURRENT_PROPERTY_NUM) = PROPERTY_OWNER(G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 3)) Then TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = PPN(G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 3)) - 1: RTP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = G(PROPERTY_GROUP_NUM(CURRENT_PROPERTY_NUM), 3) Else TP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = PPN(CURRENT_PROPERTY_NUM) - 1: RTP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM)) = PP(PROPERTY_OWNER(CURRENT_PROPERTY_NUM), PPN(CURRENT_PROPERTY_NUM) - 1)
@@ -892,7 +899,7 @@ GoTo 7010
 6100 Rem @@@@ AUCTION OFF PROPERTY @@@@
 6110 Rem
 6120 Poke 1050, Peek(1052)
-6130 X1 = L2 + 16: Y1 = B1 + 1: CIV = 1: L = CL: X1 = L2
+6130 X1 = Action_Window_Left + 16: Y1 = Board_Bottom + 1: CIV = 1: L = CL: X1 = Action_Window_Left
 For L = 1 To NUM_OF_PLAYERS
     I(PLAYER_MAP(L)) = 0
 Next L
@@ -900,7 +907,7 @@ HB = CL
 If CL = NUM_OF_PLAYERS Then CI = 1 Else CI = CL + 1
 6140 CI$ = "0"
 6150 GoSub 11320
-6160 Locate B1, L2 + 6: Color PLAYER_COLOR(PLAYER_MAP(HB)), 0: Print Using "[High bid **$#####,]"; I(PLAYER_MAP(HB))
+6160 Locate Board_Bottom, Action_Window_Left + 6: Color PLAYER_COLOR(PLAYER_MAP(HB)), 0: Print Using "[High bid **$#####,]"; I(PLAYER_MAP(HB))
 6170 I$ = InKey$
 If I$ <> Chr$(13) Then 6240
 6180 L = CI
@@ -1060,9 +1067,9 @@ If SHOWING_CARD_FLAG Then Locate Y, NX Else Locate Y, PLAYER_LOCATION_X(2, PLAYE
 6910 Print " "
 CURRENT_PROPERTY_NUM = 10
 PLAYER_CURRENT_PROPERTY(PLAYER_MAP(CL)) = CURRENT_PROPERTY_NUM
-Y = T1 + 1
+Y = Board_Top + 1
 PLAYER_LOCATION_Y(PLAYER_MAP(CL)) = Y
-NX = R1 - KK + CL
+NX = Board_Right - KK + CL
 PLAYER_LOCATION_X(1, PLAYER_MAP(CL)) = NX
 PLAYER_DAYS_IN_JAIL(PLAYER_MAP(CL)) = 1
 L = CL
@@ -1076,8 +1083,8 @@ GoTo 7010
 6940 Rem
 6950 PLAYER1_DUE = 200: TRANSACTION_PLAYER_A = CL: PLAYER_PL1 = CL: GoSub 6590
 6960 Color PLAYER_COLOR(PLAYER_MAP(CL)), 0: Locate Y, NX: Print " ": SB = PROPERTY_BOARD_NUM(CURRENT_PROPERTY_NUM): G2 = CL: GoSub 1020: G2 = 0
-6970 X = (B(PROPERTY_BOARD_NUM(CURRENT_PROPERTY_NUM), 10) - CURRENT_PROPERTY_NUM - 1) * 6 + 13 + L1: NXV = 1: NX = X: Y = T1 + 4
-6980 If Screen(Y, NX) <> 32 Then If Screen(Y, NX) = 179 Then If NXV = 1 Then NX = X: NXV = -1 Else Y = T1 + 2: NX = X: GoTo 7000 Else GoTo 6990 Else GoTo 7000
+6970 X = (B(PROPERTY_BOARD_NUM(CURRENT_PROPERTY_NUM), 10) - CURRENT_PROPERTY_NUM - 1) * 6 + 13 + Board_Left: NXV = 1: NX = X: Y = Board_Top + 4
+6980 If Screen(Y, NX) <> 32 Then If Screen(Y, NX) = 179 Then If NXV = 1 Then NX = X: NXV = -1 Else Y = Board_Top + 2: NX = X: GoTo 7000 Else GoTo 6990 Else GoTo 7000
 6990 NX = NX + NXV: GoTo 6980
 7000 Locate Y, NX: Color PLAYER_COLOR(PLAYER_MAP(CL)), 0: Print Chr$(L(PLAYER_MAP(CL))): GO2 = 1
 7010 L = CL: GoSub 7240: GoSub 7020: GoTo 7070
@@ -1086,7 +1093,7 @@ GoTo 7010
 7030 Rem @@@@ ERASE PROPERTY CARD @@@@
 7040 Rem
 7050 If SHOWING_CARD_FLAG Then SHOWING_CARD_FLAG = 0
-7060 GoSub 9760: For A = T2 + 1 To B2 - 1: Locate A, L2 + 1: Print Space$(32);: Next A: Return
+7060 GoSub 9760: For A = Action_Window_Top + 1 To Action_Window_Bottom - 1: Locate A, Action_Window_Left + 1: Print Space$(32);: Next A: Return
 
 7070 Rem
 7080 Rem @@@@ SET VARIABLES AGAIN @@@@
@@ -1111,23 +1118,21 @@ Return
 7240 Rem
 7250 Rem @@@@ SHOW CURRENT PROPERTIES @@@@
 7260 Rem
-7270 BF = 0: BP = PLAYER_CURRENT_PROPERTY(PLAYER_MAP(L)): Locate T6, BH(L): Color PLAYER_COLOR(PLAYER_MAP(L)), 0: PSS = 1 / 2 * WH - 1 / 2 * Len(PROPERTY_SHORT_NAMES$(BP))
+7270 BF = 0: BP = PLAYER_CURRENT_PROPERTY(PLAYER_MAP(L)): Locate Player_Column_Top, Player_Properties_Left(L): Color PLAYER_COLOR(PLAYER_MAP(L)), 0: PSS = 1 / 2 * WH - 1 / 2 * Len(PROPERTY_SHORT_NAMES$(BP))
 7280 Print String$(Int(PSS + (PROPERTY_TYPE(BP) > 1)) - 1, Chr$(205)); "[";
 7290 If BP = 10 And PLAYER_DAYS_IN_JAIL(PLAYER_MAP(L)) Then Color 0, 6: Print "JAIL"; Else GoSub 10880
-7300 Color PLAYER_COLOR(PLAYER_MAP(L)), 0: PSS = Pos(O) + 1: Print "]"; String$(BH(L) + WH - PSS, Chr$(205))
+7300 Color PLAYER_COLOR(PLAYER_MAP(L)), 0: PSS = Pos(O) + 1: Print "]"; String$(Player_Properties_Left(L) + WH - PSS, Chr$(205))
 7310 Return
 
 7320 Rem erase menu
-7330 Color 0, 0: Locate T4, 1: Print Space$(80);
-Return
-7340 Color 0, 0: Locate T5, L2: Print Space$(32)
+7330 Color 0, 0: Locate Menu_Top, 1: Print Space$(80);
 Return
 
 7350 Rem
 7360 Rem SEECARD
 7370 Rem
-7380 LASTCARD = 0: If SC = 1 Then Color 6, 0: Locate T2, L2 + 14: Print "Chance" Else Color 3, 0: Locate T2, L2 + 9: Print "Community Chest"
-7390 Color 7, 0: Locate B1 + 1, L2 + 3: Print Using "ENTER 2-DIGIT CARD NUM [01-##]"; CARDS_PER_TYPE: INK$ = ""
+7380 LASTCARD = 0: If SC = 1 Then Color 6, 0: Locate Action_Window_Top, Action_Window_Left + 14: Print "Chance" Else Color 3, 0: Locate Action_Window_Top, Action_Window_Left + 9: Print "Community Chest"
+7390 Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 3: Print Using "ENTER 2-DIGIT CARD NUM [01-##]"; CARDS_PER_TYPE: INK$ = ""
 7400 KEY_PRESSED$ = InKey$: If Len(KEY_PRESSED$) = 0 Then 7400
 7410 If Val(KEY_PRESSED$) Or KEY_PRESSED$ = "0" Then INK$ = INK$ + KEY_PRESSED$ Else If KEY_PRESSED$ = Chr$(27) Then SEE = 0: GoSub 7330: GoSub 7060: GoTo 3950 Else GoSub 11280: GoTo 7400
 7420 If Len(INK$) < 2 Then 7400 Else AA = Val(INK$)
@@ -1141,17 +1146,17 @@ GoTo 7390
 7470 Rem @@@@ SHOW CHANCE/COMMUNITY CHEST CARD @@@@
 7480 Rem
 7490 SHOWING_CARD_FLAG = 1: PM = 0: If SC = 2 Then 7540
-7500 Color 6, 0: Locate T2, L2 + 15: Print "Chance": Color 0, 6: GoSub 11150
+7500 Color 6, 0: Locate Action_Window_Top, Action_Window_Left + 15: Print "Chance": Color 0, 6: GoSub 11150
 7510 If PLAYER_OWES_MONEY_STATUS = 0 Then C1 = C1 + 1: If C1 > CARDS_PER_TYPE Then C1 = 1
 7520 HIDDEN_INPUT_KEYS_TO_ACCEPT = 2: GoSub 11180: If HIDDEN_INPUT_KEYS_TO_ACCEPT = 2 Then CHANCE_CARDS(C1) = INK
 7530 CARD = CHANCE_CARDS(C1): If J1 And CARD = 5 Then 7510 Else GoTo 7580
-7540 Color 3, 0: Locate T2, L2 + 10: Print "Community Chest": Color 0, 3: GoSub 11150
+7540 Color 3, 0: Locate Action_Window_Top, Action_Window_Left + 10: Print "Community Chest": Color 0, 3: GoSub 11150
 7550 If PLAYER_OWES_MONEY_STATUS = 0 Then C2 = C2 + 1: If C2 > CARDS_PER_TYPE Then C2 = 1
 7560 HIDDEN_INPUT_KEYS_TO_ACCEPT = 2: GoSub 11180: If HIDDEN_INPUT_KEYS_TO_ACCEPT = 2 Then COMMUNITY_CHEST_CARDS(C2) = INK
 7570 CARD = COMMUNITY_CHEST_CARDS(C2): If J2 And CARD = 14 Then 7550
 7580 Color 0, 9 - SC * 3
 For A = 1 To Val(CARD$(SC, CARD, 0))
-    Locate Fix(T3 + (7 - Val(CARD$(SC, CARD, 0)) - 1) / 2 + A - 1)+1, Fix(L3 + (30 - Len(CARD$(SC, CARD, A)) + 1) / 2)+1
+    Locate Fix(Chance_Card_Top + (7 - Val(CARD$(SC, CARD, 0)) - 1) / 2 + A - 1)+1, Fix(Chance_Card_Left + (30 - Len(CARD$(SC, CARD, A)) + 1) / 2)+1
     Print CARD$(SC, CARD, A);
 Next A
 _Delay 0.1
@@ -1270,11 +1275,11 @@ If PLAYER_OWES_MONEY_STATUS And PLAYER_PL1 = L Then PLAYER_OWES_MONEY_STATUS = 0
 8310 Rem
 8320 Rem *DUE*
 8330 GoSub 10360
-8340 Locate B1, L2 + 11: Color 14, 1: Print Using "[Due**$###]"; DUE: Return
+8340 Locate Board_Bottom, Action_Window_Left + 11: Color 14, 1: Print Using "[Due**$###]"; DUE: Return
 
 8350 Rem
 8360 Rem **** SAVE GAME IN GN$ ****
-8370 Locate B1 + 1, L2 + 7: Color 7, 0: Print Using "Saving:`&'"; GN$
+8370 Locate Board_Bottom + 1, Action_Window_Left + 7: Color 7, 0: Print Using "Saving:`&'"; GN$
 8380 Open "O", #1, GN$ + ".MF": Write #1, CL, CURRENT_PROPERTY_NUM, NX, Y, BACK_TO_BACK_DOUBLES_COUNT, NUM_OF_PLAYERS, J1, J2, T, E, C1, C2, PAUSE_SECS, SOUNDS, PLAYER_OWES_MONEY_STATUS, PLAYER1_DUE, PLAYER2_DUE, PLAYER_PL, PLAYER_PL1, PL2, TRANSACTION_PLAYER_A, TRANSACTION_PLAYER_B, PLAYER1_DUE_TMP, PLAYER2_DUE_TMP, TRANSACTION_ALL_PLAYERS_FLAG, NOROLL, DIE1_ROLLED, DIE2_ROLLED, PT_FLAG, PLAYY
 8390 For J = 1 To MAX_PLAYERS: Write #1, J$(J), PLAYER_DAYS_IN_JAIL(J), L(J), PLAYER_CURRENT_PROPERTY(J), PLAYER_LOCATION_X(1, J), PLAYER_LOCATION_Y(J), PLAYER_CASH(J), PLAYER_COLOR(J), FPLAYER_DAYS_IN_JAIL(J), RTP(J), TP(J), PLAYER_MAP(J), PLAYER_UNMAP(J), OCC3(J), OCCR(J): Next J
 8400 For P = 1 To CARDS_PER_TYPE: Write #1, CHANCE_CARDS(P), COMMUNITY_CHEST_CARDS(P): Next P
@@ -1282,7 +1287,7 @@ If PLAYER_OWES_MONEY_STATUS And PLAYER_PL1 = L Then PLAYER_OWES_MONEY_STATUS = 0
 
 8420 Rem
 8430 Rem **** LOAD GAME FROM GN$ ****
-8440 Locate B1 + 1, L2 + 7: Color 7, 0: Print Using "Loading:`&'"; GN$
+8440 Locate Board_Bottom + 1, Action_Window_Left + 7: Color 7, 0: Print Using "Loading:`&'"; GN$
 8450 Open "I", #1, GN$ + ".MF": Input #1, CL, CURRENT_PROPERTY_NUM, NX, Y, BACK_TO_BACK_DOUBLES_COUNT, NUM_OF_PLAYERS, J1, J2, T, E, C1, C2, PAUSE_SECS, SOUNDS, PLAYER_OWES_MONEY_STATUS, PLAYER1_DUE, PLAYER2_DUE, PLAYER_PL, PLAYER_PL1, PL2, TRANSACTION_PLAYER_A, TRANSACTION_PLAYER_B, PLAYER1_DUE_TMP, PLAYER2_DUE_TMP, TRANSACTION_ALL_PLAYERS_FLAG, NOROLL, DIE1_ROLLED, DIE2_ROLLED, PT_FLAG, PLAYY
 8460 For J = 1 To MAX_PLAYERS: Input #1, J$(J), PLAYER_DAYS_IN_JAIL(J), L(J), PLAYER_CURRENT_PROPERTY(J), PLAYER_LOCATION_X(1, J), PLAYER_LOCATION_Y(J), PLAYER_CASH(J), PLAYER_COLOR(J), FPLAYER_DAYS_IN_JAIL(J), RTP(J), TP(J), PLAYER_MAP(J), PLAYER_UNMAP(J), OCC3(J), OCCR(J): Next J
 8470 For P = 1 To CARDS_PER_TYPE: Input #1, CHANCE_CARDS(P), COMMUNITY_CHEST_CARDS(P): Next P
@@ -1298,18 +1303,30 @@ If PLAYER_OWES_MONEY_STATUS And PLAYER_PL1 = L Then PLAYER_OWES_MONEY_STATUS = 0
 8560 Return
 
 8570 Rem **** POSITION PLAYERS' BOARD
-8580 L1 = 3: R1 = L1 + 74: T1 = 1: B1 = T1 + 5
-8590 If NUM_OF_PLAYERS = 1 Then L2 = 4: BH(1) = (80 - 9 + 33 + L2) / 2
-8600 If NUM_OF_PLAYERS = 2 Then L2 = 24: BH(1) = (L2 - 9) / 2: BH(2) = (L2 - 9) / 2 + L2 + 33
-8610 If NUM_OF_PLAYERS = 3 Then L2 = 4: BH(1) = (80 + L2 + 33 - 9) / 3 + 4: BH(2) = (80 + L2 + 33 - 9) / 2 + 1: BH(3) = (80 + L2 + 33 - 9) * 2 / 3 - 2
-8620 If NUM_OF_PLAYERS = 4 Then L2 = 24: BH(1) = 3: BH(2) = BH(1) + 11: BH(3) = L2 + 35: BH(4) = BH(3) + 11
-8630 T2 = B1 + 2: B2 = T2 + 16: R2 = L2 + 33
-8640 T3 = T2 + 4: B3 = T3 + 6: L3 = L2 + 1: R3 = R2 - 1
-8650 T4 = B1 + 1: T5 = B1 + 2: W6 = 9: H6 = 14: W# = 14: T6 = B1 + 2: B6 = T6 + H6 - 1
-8660 For L = 1 To 4
-    BV(L) = T6 + 3
+Board_Left = 3
+Board_Right = Board_Left + 74
+Board_Top = 1
+Board_Bottom = Board_Top + 5
+If NUM_OF_PLAYERS = 1 Then Action_Window_Left = 4: Player_Properties_Left(1) = (80 - 9 + 33 + Action_Window_Left) / 2
+If NUM_OF_PLAYERS = 2 Then Action_Window_Left = 24: Player_Properties_Left(1) = (Action_Window_Left - 9) / 2: Player_Properties_Left(2) = (Action_Window_Left - 9) / 2 + Action_Window_Left + 33
+If NUM_OF_PLAYERS = 3 Then Action_Window_Left = 4: Player_Properties_Left(1) = (80 + Action_Window_Left + 33 - 9) / 3 + 4: Player_Properties_Left(2) = (80 + Action_Window_Left + 33 - 9) / 2 + 1: Player_Properties_Left(3) = (80 + Action_Window_Left + 33 - 9) * 2 / 3 - 2
+If NUM_OF_PLAYERS = 4 Then Action_Window_Left = 24: Player_Properties_Left(1) = 3: Player_Properties_Left(2) = Player_Properties_Left(1) + 11: Player_Properties_Left(3) = Action_Window_Left + 35: Player_Properties_Left(4) = Player_Properties_Left(3) + 11
+Action_Window_Top = Board_Bottom + 2
+Action_Window_Bottom = Action_Window_Top + 16
+Action_Window_Right = Action_Window_Left + 33
+Chance_Card_Top = Action_Window_Top + 4
+Chance_Card_Bottom = Chance_Card_Top + 6
+Chance_Card_Left = Action_Window_Left + 1
+Chance_Card_Right = Action_Window_Right - 1
+Menu_Top = Board_Bottom + 1
+Player_Column_Inner_Width = 9
+Player_Column_Inner_Height = 14
+Player_Column_Top = Board_Bottom + 2
+Player_Column_Bottom = Player_Column_Top + Player_Column_Inner_Height - 1
+For L = 1 To 4
+    Player_Properties_Top(L) = Player_Column_Top + 3
 Next L
-8670 Return
+Return
 
 8680 Rem
 8690 Rem save file names
@@ -1358,8 +1375,8 @@ Return
 
 8980 Rem
 8990 Rem ERRORS
-9000 Color 14, 4: Locate T2 + 1, L2 + 1
-9010 GoSub 10310: Color 0, 0: Locate T2 + 1, L2 + 1: Print Space$(31)
+9000 Color 14, 4: Locate Action_Window_Top + 1, Action_Window_Left + 1
+9010 GoSub 10310: Color 0, 0: Locate Action_Window_Top + 1, Action_Window_Left + 1: Print Space$(31)
 Return
 
 9020 Rem
@@ -1378,9 +1395,9 @@ Return
 
 9060 Rem
 9070 Rem ACCEPT INFORMATION
-9080 KYL = 8: KYTF = 7: KYF = 14: KYB = 1: KYFSTR$ = "\" + Space$(KYL - 2) + "\": KYA = 1: KYY = B1 + 1: KY$ = String$(KYL, 97)
+9080 KYL = 8: KYTF = 7: KYF = 14: KYB = 1: KYFSTR$ = "\" + Space$(KYL - 2) + "\": KYA = 1: KYY = Board_Bottom + 1: KY$ = String$(KYL, 97)
 9090 KYFSTR$ = "\" + Space$(KYL - 2) + "\": KY$ = Space$(KYL)
-9100 INS = 0: KYX = L2 + (32 - Len(KYT$) - KYL) / 2: Color KYTF, 0: Locate KYY, KYX: Print KYT$;: KYX = KYX + Len(KYT$)
+9100 INS = 0: KYX = Action_Window_Left + (32 - Len(KYT$) - KYL) / 2: Color KYTF, 0: Locate KYY, KYX: Print KYT$;: KYX = KYX + Len(KYT$)
 9110 KY = 1
 9120 Locate KYY, KYX: Color KYF, KYB: Print Using KYFSTR$; K$
 9130 If KY > KYL Then KY = KYL Else If KY < 1 Then KY = 1
@@ -1458,7 +1475,7 @@ Return
 
 9760 Rem
 9770 Rem blank TOP OF CARD BOX
-9780 Locate T2, L2 + 1: Color COLOR_ZZ, 0: Print String$(32, Chr$(205));
+9780 Locate Action_Window_Top, Action_Window_Left + 1: Color COLOR_ZZ, 0: Print String$(32, Chr$(205));
 Return
 
 9790 Rem
@@ -1483,13 +1500,13 @@ Return
 9920 Rem
 9930 Rem O$=Text:O$()=Options 1-5:O=# of options:a=foreground color:b=background color:c=highlighting color:d=background highlight color:x1=center x pos:y1=verticle pos:aa=current option #
 9940 AA = 1
-9950 Y1 = T4: X1 = L2 + 16: A = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): B = 0: C = 14: D = 1: GoTo 10020
+9950 Y1 = Menu_Top: X1 = Action_Window_Left + 16: A = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): B = 0: C = 14: D = 1: GoTo 10020
 9960 AA = 1
-9970 Y1 = T4: X1 = L2 + 16: A = 7: B = 0: C = 14: D = 1: GoTo 10020
+9970 Y1 = Menu_Top: X1 = Action_Window_Left + 16: A = 7: B = 0: C = 14: D = 1: GoTo 10020
 9980 AA = 1
-9990 Y1 = T4: X1 = L2 + 16: A = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): B = 0: C = 14: D = 1: For F = 0 To O: OO(F) = 1: Next F: GoTo 10020
+9990 Y1 = Menu_Top: X1 = Action_Window_Left + 16: A = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): B = 0: C = 14: D = 1: For F = 0 To O: OO(F) = 1: Next F: GoTo 10020
 10000 AA = 1
-10010 Y1 = T4: X1 = L2 + 16: A = 7: B = 0: C = 14: D = 1: For F = 0 To O: OO(F) = 1: Next F
+10010 Y1 = Menu_Top: X1 = Action_Window_Left + 16: A = 7: B = 0: C = 14: D = 1: For F = 0 To O: OO(F) = 1: Next F
 10020 If InKey$ <> "" Then GoSub 10350
 10030 Def Seg = 0: Poke 1050, Peek(1052)
 10040 XX = Len(O$): For F = 1 To O: XX = XX + Len(O$(F)) + 3: Next F: XX = X1 - Int((XX - 3) / 2)
@@ -1559,10 +1576,10 @@ Return
 
 10460 Rem
 10470 Rem SET NUMBER OF PLAYERS
-10480 Color 7, 0: Locate B1 + 1, L2 + 2: Print Using "Enter number of players [1-#]"; MAX_PLAYERS
+10480 Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 2: Print Using "Enter number of players [1-#]"; MAX_PLAYERS
 10490 GoSub 11350: If INK$ = Chr$(27) Then GoSub 7330: GoTo 10830
 10500 If INK > MAX_PLAYERS Or INK < 1 Then GoSub 11280: GoTo 10490
-10510 GoSub 7330: Color 7, 0: Locate B1 + 1, L2 + 12: Print Using "# Players"; INK
+10510 GoSub 7330: Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 12: Print Using "# Players"; INK
 10520 GoSub 10310: GoSub 7330
 10530 If NUM_OF_PLAYERS = INK GoTo 10410 Else If INK > NUM_OF_PLAYERS Then 10550
 10540 For L = NUM_OF_PLAYERS To INK + 1 Step -1: GoSub 8200: Next L
@@ -1575,9 +1592,9 @@ Next L
 
 10570 Rem
 10580 Rem SET PAUSE VALUE
-10590 Color 7, 0: Locate B1 + 1, L2 + 5: Print "Enter Pause value [0-9]";
+10590 Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 5: Print "Enter Pause value [0-9]";
 10600 GoSub 11350: If INK$ = Chr$(27) Then 10620 Else PAUSE_SECS = INK
-10610 GoSub 7330: Color 7, 0: Locate B1 + 1, L2 + 8: Print Using "# Second Pauses"; PAUSE_SECS
+10610 GoSub 7330: Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 8: Print Using "# Second Pauses"; PAUSE_SECS
 10620 GoSub 10310: GoSub 7330
 GoTo 10720
 
@@ -1599,7 +1616,7 @@ On AA + 1 GOTO 10410, 10580, 10450, 10870, 10770
 
 10770 Rem
 10780 Rem change monitor
-10790 Color 7, 0: Locate B1 + 1, L2 + 7: If COLOR_ZZ = 7 Then Print "  Color Monitor   ": COLOR_ZZ = 8 Else Print "Monochrome Monitor": COLOR_ZZ = 7
+10790 Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 7: If COLOR_ZZ = 7 Then Print "  Color Monitor   ": COLOR_ZZ = 8 Else Print "Monochrome Monitor": COLOR_ZZ = 7
 10800 PROPERTY_FOREGROUND_COLOR(12) = COLOR_ZZ: PROPERTY_FOREGROUND_COLOR(28) = COLOR_ZZ: PROPERTY_FOREGROUND_COLOR(4) = COLOR_ZZ
 10810 GoSub 10300: GoSub 7330: GoSub 750: SG = 1: FM = 1
 GoTo 890
@@ -1640,7 +1657,7 @@ GoTo 890
 
 11130 Rem
 11140 Rem color/erase chance/chest card area
-11150 For A = T3 To B3: Locate A, L2 + 1: Print Space$(32): Next A: Return
+11150 For A = Chance_Card_Top To Chance_Card_Bottom: Locate A, Action_Window_Left + 1: Print Space$(32): Next A: Return
 
 11160 Rem
 11170 Rem Accept hidden input if the ALT key is held down
@@ -1654,7 +1671,7 @@ For F = 1 To HIDDEN_INPUT_KEYS_TO_ACCEPT
 11230 Return
 
 11240 Rem sound on/off
-11250 Color 7, 0: Locate T4, L2 + 10: If SOUNDS Then SOUNDS = 0: Print "Sound Off" Else SOUNDS = 1: Print "Sound On"
+11250 Color 7, 0: Locate Menu_Top, Action_Window_Left + 10: If SOUNDS Then SOUNDS = 0: Print "Sound Off" Else SOUNDS = 1: Print "Sound On"
 11260 GoSub 10300: GoSub 7330
 11270 Return
 
@@ -1664,7 +1681,7 @@ For F = 1 To HIDDEN_INPUT_KEYS_TO_ACCEPT
 
 11310 Rem
 11320 Rem put back bottom of board
-11330 Color COLOR_ZZ, 0: Locate T1 + 5, L1: Print "»ÕÕÕÕÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕÕÕÕÕº"
+11330 Color COLOR_ZZ, 0: Locate Board_Top + 5, Board_Left: Print "»ÕÕÕÕÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕœÕÕÕÕÕÕÕÕÕº"
 Return
 
 11340 Rem
@@ -1679,8 +1696,8 @@ Return
 11420 TP(PLAYER_MAP(L)) = 0
 RTP(PLAYER_MAP(L)) = 0
 PLAYER_CURRENT_PROPERTY(PLAYER_MAP(L)) = 0
-PLAYER_LOCATION_X(1, PLAYER_MAP(L)) = R1 - 5 + L
-PLAYER_LOCATION_Y(PLAYER_MAP(L)) = T1 + 4
+PLAYER_LOCATION_X(1, PLAYER_MAP(L)) = Board_Right - 5 + L
+PLAYER_LOCATION_Y(PLAYER_MAP(L)) = Board_Top + 4
 PLAYER_CASH(PLAYER_MAP(L)) = 1500
 Return
 
@@ -1698,18 +1715,18 @@ GoTo 7010
 
 11520 Rem
 11530 Rem HIGHLIGHT/NORMALIZE `DOUBLES' AT TOP OF BOARD
-11540 Locate T1, L1 + 11: Color COLOR_ZZ, 0: Print "[";
+11540 Locate Board_Top, Board_Left + 11: Color COLOR_ZZ, 0: Print "[";
 If BACK_TO_BACK_DOUBLES_COUNT Then Color 14, 1: Print "DOUBLES"; Else Print "doubles";
 11550 Color COLOR_ZZ, 0: Print "]"
 Return
 
 11560 Rem
 11570 Rem HIGHLIGHT/NORMALIZE `DOUBLE RENT' AT TOP OF BOARD
-11580 Locate T1, R1 - 23: Color COLOR_ZZ, 0: Print "[";: If PT_FLAG Then Color 14, 1: Print "DOUBLE RENT"; Else Print "double rent";
+11580 Locate Board_Top, Board_Right - 23: Color COLOR_ZZ, 0: Print "[";: If PT_FLAG Then Color 14, 1: Print "DOUBLE RENT"; Else Print "double rent";
 11590 Color COLOR_ZZ, 0: Print "]";: Return
 11600 Rem
 11610 Rem HIGHLIGHT/NORMALIZE AUTO KEYBOARD
-11620 Locate T1, L1 + 32: Color COLOR_ZZ, 0: Print "[";: If AUTOKYBD Then Color 14, 1: Print "AUTOMATIC"; Else Print "automatic";
+11620 Locate Board_Top, Board_Left + 32: Color COLOR_ZZ, 0: Print "[";: If AUTOKYBD Then Color 14, 1: Print "AUTOMATIC"; Else Print "automatic";
 11630 Color COLOR_ZZ, 0: Print "]";: Return
 
 11640 Rem
@@ -1734,7 +1751,7 @@ Return
 11810 O$ = "": O$(1) = "sell": O$(2) = "give": O$(3) = "receiver(" + Right$(Str$(TRADING_PLAYER_B), 1) + ")": O = 3: OO(1) = Abs((PLAYER_CASH(PLAYER_MAP(TRADING_PLAYER_B)) > 0)): OO(2) = 1: If NUM_OF_PLAYERS > 2 Then OO(3) = 1 Else OO(3) = 0
 11820 GoSub 9940: If AA = 3 Then GoSub 11910: GoTo 11770 Else If AA = 0 Then 11780
 11830 If AA = 2 Then 11870
-11840 K$ = "": KYT$ = "Sell for:": KYL = 7: KYTF = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): KYF = 14: KYB = 1: KYFSTR$ = "\     \": KYA = 2: KYY = B1 + 1: GoSub 9100
+11840 K$ = "": KYT$ = "Sell for:": KYL = 7: KYTF = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): KYF = 14: KYB = 1: KYFSTR$ = "\     \": KYA = 2: KYY = Board_Bottom + 1: GoSub 9100
 11850 If KY$ = Chr$(27) Or Val(K$) = 0 Then 11810 Else If Val(K$) > PLAYER_CASH(PLAYER_MAP(TRADING_PLAYER_B)) Then GoSub 11280: GoTo 11840
 11860 PLAYER1_DUE = Val(K$): PLAYER2_DUE = -Val(K$): TRANSACTION_PLAYER_A = TRADING_PLAYER_A: TRANSACTION_PLAYER_B = TRADING_PLAYER_B: GoSub 6590
 11870 FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(TRADING_PLAYER_A)) = FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(TRADING_PLAYER_A)) - 1: FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(TRADING_PLAYER_B)) = FPLAYER_DAYS_IN_JAIL(PLAYER_MAP(TRADING_PLAYER_B)) + 1: If CARD = 1 Then J1 = PLAYER_MAP(TRADING_PLAYER_B) Else J2 = PLAYER_MAP(TRADING_PLAYER_B)
@@ -1743,7 +1760,7 @@ Return
 
 11900 Rem
 11910 Rem change receiver
-11920 Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Locate B1 + 1, L2 + 3: Print Using "Enter player number [1-#]"; NUM_OF_PLAYERS
+11920 Color PLAYER_COLOR(PLAYER_MAP(TRADING_PLAYER_A)), 0: Locate Board_Bottom + 1, Action_Window_Left + 3: Print Using "Enter player number [1-#]"; NUM_OF_PLAYERS
 11930 KEY_PRESSED$ = InKey$: If Len(KEY_PRESSED$) = 0 Then 11930
 11940 If Len(KEY_PRESSED$) <> 1 Then GoSub 11280: GoTo 11930 Else If KEY_PRESSED$ = Chr$(27) Then GoSub 7330: Return
 11950 If Val(KEY_PRESSED$) > 0 And Val(KEY_PRESSED$) <= NUM_OF_PLAYERS And Val(KEY_PRESSED$) <> TRADING_PLAYER_A Then TRADING_PLAYER_B = Val(KEY_PRESSED$) Else GoSub 11280: GoTo 11930
@@ -1751,13 +1768,13 @@ Return
 
 11970 Rem
 11980 Rem TRANFER FUNDS OVER TO ANOTHER PLAYER
-11990 K$ = "": KYT$ = "Amount to trade:": KYL = 7: KYTF = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): KYF = 14: KYB = 1: KYFSTR$ = "\     \": KYA = 2: KYY = B1 + 1: GoSub 9100: If KY$ = Chr$(27) Or Val(K$) = 0 Then 11680
+11990 K$ = "": KYT$ = "Amount to trade:": KYL = 7: KYTF = PLAYER_COLOR(PLAYER_MAP(PLAYER_PL)): KYF = 14: KYB = 1: KYFSTR$ = "\     \": KYA = 2: KYY = Board_Bottom + 1: GoSub 9100: If KY$ = Chr$(27) Or Val(K$) = 0 Then 11680
 12000 If Val(K$) > PLAYER_CASH(PLAYER_MAP(TRADING_PLAYER_A)) Then GoSub 11280: GoTo 11990
 12010 PLAYER1_DUE = -Val(K$): PLAYER2_DUE = Val(K$): TRANSACTION_PLAYER_B = TRADING_PLAYER_B: TRANSACTION_PLAYER_A = PLAYER_PL: GoSub 6590: If PLAYER_OWES_MONEY_STATUS = 0 Then 1940 Else GoTo 11650
 
 12020 Rem
 12030 Rem Show unowned properties
-12040 Locate B2 + 1, L2 + 3
+12040 Locate Action_Window_Bottom + 1, Action_Window_Left + 3
 12050 For UOP = 1 To 39: If PROPERTY_TYPE(UOP) < 2 Then 12100
     12060 If PROPERTY_OWNER(UOP) Then Color PLAYER_COLOR(PROPERTY_OWNER(UOP)), 0: Print Chr$(22);: GoTo 12100
     12070 If PROPERTY_GROUP_NUM(UOP) = 10 Then Color 7, 0: Print "€";: GoTo 12100
@@ -1777,20 +1794,20 @@ Return
 12130 Rem
 12140 Rem change player's name
 12141 GoSub 12162: L = EPN: If L = 0 Then 10830
-12150 K$ = J$(PLAYER_MAP(L)): KYT$ = "Player " + Right$(Str$(L), 1) + "'s name:": KYL = 9: KYTF = 7: KYF = 14: KYB = 1: KYFSTR$ = "\       \": KYA = 1: KYY = B1 + 1: GoSub 9100
+12150 K$ = J$(PLAYER_MAP(L)): KYT$ = "Player " + Right$(Str$(L), 1) + "'s name:": KYL = 9: KYTF = 7: KYF = 14: KYB = 1: KYFSTR$ = "\       \": KYA = 1: KYY = Board_Bottom + 1: GoSub 9100
 12160 If KY$ = Chr$(27) Then 10830 Else GoSub 9500: J$(PLAYER_MAP(L)) = K$: GoSub 1510: GoTo 10830
 
 12161 Rem
 12162 Rem Enter player num
-12170 Color 7, 0: Locate B1 + 1, L2 + 2: Print Using "Enter Player's Number [1-#]"; NUM_OF_PLAYERS
+12170 Color 7, 0: Locate Board_Bottom + 1, Action_Window_Left + 2: Print Using "Enter Player's Number [1-#]"; NUM_OF_PLAYERS
 12180 EP$ = InKey$: If Len(EP$) <> 1 Then 12180
 12190 If EP$ = Chr$(27) Then EPN = 0: GoSub 7330: Return Else EPN = Val(EP$)
 12200 If EPN > 0 And EPN <= NUM_OF_PLAYERS Then GoSub 7330: Return Else GoSub 11280: GoTo 12180
 
 Sub Show_Player_Bail_Cards(Player_Num)
     Rem @@@@ SHOW Bail CARDS @@@@
-    Shared BV(),BH(),W#,WH,J1,J1,PLAYER_MAP(),PLAYER_COLOR()
-    Locate BV(Player_Num) + W#, BH(Player_Num)
+    Shared Player_Properties_Top(),Player_Properties_Left(),Player_Column_Inner_Height,WH,J1,J1,PLAYER_MAP(),PLAYER_COLOR()
+    Locate Player_Properties_Top(Player_Num) + Player_Column_Inner_Height, Player_Properties_Left(Player_Num)
     If J1 = PLAYER_MAP(Player_Num) Then
         Color 0, 6
         Print "Bail"; 
@@ -1798,7 +1815,7 @@ Sub Show_Player_Bail_Cards(Player_Num)
         Color PLAYER_COLOR(PLAYER_MAP(Player_Num)), 0
         Print "ÕÕÕÕ";
     End If
-    Locate BV(Player_Num) + W#, BH(Player_Num) + WH - 4
+    Locate Player_Properties_Top(Player_Num) + Player_Column_Inner_Height, Player_Properties_Left(Player_Num) + WH - 4
     If J2 = PLAYER_MAP(Player_Num) Then 
         Color 0, 3
         Print "Bail"; 
